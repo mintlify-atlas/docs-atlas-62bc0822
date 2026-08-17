@@ -8,14 +8,14 @@ La página de detalle del servicio Revisa, accesible en `/apps/misdocumentos/det
 
 ## ¿Qué encontrarás aquí?
 
-La vista de detalle está organizada en dos columnas principales. La columna izquierda concentra los materiales del solicitante y la columna derecha muestra la respuesta profesional:
+La vista de detalle se organiza en tres secciones. En la parte superior se muestran los datos del usuario. Debajo, dos columnas presentan los materiales del caso a la izquierda y la respuesta profesional a la derecha.
 
-- **Documento original que enviaste** — Los archivos que adjuntaste al crear la solicitud de revisión, disponibles para consultar o visualizar nuevamente.
-- **Inquietudes** — El texto que describiste al momento de enviar el documento, con las dudas o puntos específicos que querías que el profesional revisara.
+- **Datos del usuario** — Nombre completo (`user_nombre_completo`), correo electrónico (`user_email`) y fecha de creación del caso (`fecha`), visibles en la tarjeta de encabezado.
 - **Nota de voz** — Si incluiste una grabación de audio al crear la solicitud (campo `voice`), aparecerá un reproductor de audio integrado para escucharla directamente desde la página.
-- **Comentarios y observaciones del abogado revisor** — Las observaciones escritas por el profesional se muestran en el campo `respuesta` dentro de la sección "Detalles del caso".
-- **Archivos adjuntos del revisor** — Los documentos finales cargados por el abogado como resultado de la revisión (`documentos_repuestas`), con la opción de visualizarlos directamente.
-- **Datos del usuario** — Nombre completo, correo electrónico y fecha de creación del caso, visibles en la tarjeta de encabezado.
+- **Inquietudes** — El texto que describiste al momento de enviar el documento, con las dudas o puntos específicos que querías que el profesional revisara (campo `inquietudes`).
+- **Documento adjunto** — Los archivos que adjuntaste al crear la solicitud de revisión (campo `documentos`), disponibles para consultar o visualizar nuevamente.
+- **Observaciones del abogado revisor** — Las observaciones escritas por el profesional se muestran en el campo `respuesta` dentro de la sección derecha.
+- **Documento final** — Los documentos cargados por el abogado como resultado de la revisión (`documentos_repuestas`), con la opción de visualizarlos directamente.
 
 ## Cómo acceder al detalle de revisión
 
@@ -36,7 +36,7 @@ La vista de detalle está organizada en dos columnas principales. La columna izq
 
 ## Nota de voz
 
-Si al crear tu solicitud de revisión incluiste una grabación de voz explicando tu caso, un reproductor de audio aparecerá en la sección **"Nota de voz"** dentro de los detalles del caso. Haz clic en el control de reproducción para escuchar el mensaje. De igual manera, si el revisor adjuntó una nota de voz como parte de su respuesta, esta también estará disponible en la sección correspondiente.
+Si al crear tu solicitud de revisión incluiste una grabación de voz explicando tu caso, un reproductor de audio aparecerá en la sección **"Nota de voz"** dentro de los detalles del caso. Haz clic en el control de reproducción para escuchar el mensaje.
 
 <Info>
   Los casos son procesados por el equipo legal de TGP Consultores. Los tiempos de respuesta dependen del plan contratado y del volumen de solicitudes en curso. Para asuntos urgentes que requieran atención inmediata, utiliza el servicio **Asesoría** para agendar una consulta directa con un profesional.

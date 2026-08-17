@@ -8,15 +8,18 @@ description: "Solicita una asesoría legal en TGP Consultores por teléfono, vid
 
 ## Modalidades de atención
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Llamada Telefónica" icon="phone" href="#llamada-telefonica">
     El abogado te llama al número registrado en la fecha y hora que selecciones.
   </Card>
   <Card title="Videollamada" icon="video" href="#videollamada">
     Consulta por videoconferencia a través de Jitsi Meet en la fecha y hora acordadas.
   </Card>
-  <Card title="Emergencia / Presencial" icon="circle-exclamation" href="#emergencia">
-    Atención urgente o presencial para casos que no admiten espera.
+  <Card title="Presencial" icon="user" href="#presencial">
+    Cita en las instalaciones de TGP Consultores en la fecha y hora que reserves.
+  </Card>
+  <Card title="Emergencia" icon="circle-exclamation" href="#emergencia">
+    Atención urgente para casos que no admiten espera; omite la selección de fecha y horario.
   </Card>
 </CardGroup>
 
@@ -65,10 +68,10 @@ El área **Mercantil** atiende asuntos vinculados a la actividad empresarial y s
 
 <Steps>
   <Step title="Accede a Asesoría">
-    Desde el panel principal, navega a **Asesoría** en la ruta `/apps/asesoria`. Verás las opciones de modalidad de atención: Presencial, Llamada Telefónica, Videollamada y Caso de Emergencia.
+    Desde el panel principal, navega a **Asesoría** en la ruta `/apps/asesoria`. Verás las cuatro opciones de modalidad de atención: Presencial, Llamada Telefónica, Videollamada y Caso de Emergencia.
   </Step>
   <Step title="Selecciona el tipo de cita">
-    Haz clic en la modalidad que prefieras: **Llamada Telefónica** (`TipoCita: 'Llámada Teléfonica'`), **Videollamada** (`TipoCita: 'Videollamada'`) o **Presencial** (`TipoCita: 'Presencial'`). El tipo de cita se guarda en `localStorage` bajo la clave `Tipo`.
+    Haz clic en la modalidad que prefieras. El tipo de cita se guarda en `localStorage` bajo la clave `Tipo` con los siguientes valores: **Llamada Telefónica** (`'Llámada Teléfonica'`), **Videollamada** (`'Videollamada'`) o **Presencial** (`'Presencial'`). La modalidad **Emergencia** no asigna un valor a `Tipo`.
   </Step>
   <Step title="Elige el área jurídica y el tema">
     Serás dirigido a la pantalla de selección de área (`/apps/Tipoasesoria`). Selecciona entre **Familiar**, **Laboral** o **Mercantil** y luego haz clic en el tema específico de tu consulta. El tema y el área quedan guardados en `localStorage` bajo las claves `ItemAsesoria` y `TipoAsesoria`.
@@ -83,7 +86,7 @@ El área **Mercantil** atiende asuntos vinculados a la actividad empresarial y s
     Si seleccionaste la modalidad **Emergencia**, el sistema activa el flujo de atención inmediata sin necesidad de elegir fecha ni hora. El equipo de TGP tomará contacto contigo lo antes posible.
   </Step>
   <Step title="Confirma la cita">
-    Haz clic en **Siguiente** para confirmar. La cita quedará registrada en Firestore con los campos `TipoCita` y el área jurídica seleccionada, y serás redirigido a la pantalla de pre-evaluación (`/apps/asesoria/preevaluacion`).
+    Haz clic en **Siguiente** para confirmar. La cita quedará registrada en Firestore y serás redirigido a la pantalla de pre-evaluación (`/apps/asesoria/preevaluacion`).
   </Step>
 </Steps>
 
@@ -103,12 +106,16 @@ La modalidad de **Videollamada** utiliza la plataforma **Jitsi Meet** (`meet.jit
   Para una videollamada óptima asegúrate de contar con conexión a internet estable, cámara y micrófono funcionando, y un navegador actualizado. No es necesario instalar ninguna aplicación adicional.
 </Note>
 
+## Presencial
+
+En la modalidad **Presencial**, la cita se agenda para asistir físicamente a las instalaciones de TGP Consultores. Al igual que las modalidades Telefónica y Videollamada, debes seleccionar fecha y horario en el calendario de disponibilidad antes de confirmar.
+
 ## Emergencia
 
 La modalidad de **Emergencia** está diseñada para situaciones urgentes que requieren atención jurídica inmediata. Al seleccionar esta opción, el sistema omite el proceso de selección de fecha y horario y notifica de inmediato al equipo legal de TGP para que tome contacto contigo a la brevedad posible.
 
 <Warning>
-  Cada asesoría consume **una cuota de asesoría** de tu plan activo. El plan promocional gratuito incluye exactamente **1 asesoría**. Una vez agotada la cuota, deberás adquirir un nuevo plan para agendar consultas adicionales.
+  Cada asesoría consume **una cuota de asesoría** de tu plan activo (`cant_asesoria`). Una vez agotada la cuota, deberás adquirir un nuevo plan para agendar consultas adicionales.
 </Warning>
 
 <Tip>

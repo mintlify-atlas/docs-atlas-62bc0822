@@ -36,8 +36,8 @@ La vista de detalle de Revisa del administrador (`/apps/revisa/detallerevisa/:id
 **PreviewCard**
 
 Ocupa la columna principal (9/12 de ancho) y muestra:
-- El archivo o documento que el cliente envió para revisión, cargado desde `documentos` en Firestore.
-- La nota de voz del cliente, cargada desde el campo `voice` del documento en Firestore.
+- El archivo o documento que el cliente envió para revisión, cargado desde el campo `documentos` en Firestore.
+- La nota de voz del cliente, reproducida directamente desde la URL almacenada en el campo `voice` del documento.
 - Los metadatos del caso para contextualizar la solicitud.
 
 **PreviewActions**
@@ -52,5 +52,5 @@ Ocupa la columna lateral (3/12 de ancho) junto a las tarjetas de detalles del se
 Si el cliente adjuntó una nota de voz al momento de crear la solicitud de revisión, el campo `voice` del documento en Firestore contendrá la URL del archivo de audio almacenado en Firebase Storage. En ese caso, los controles de reproducción de audio aparecen en `PreviewCard`, permitiendo al administrador escuchar las indicaciones del cliente antes de redactar su respuesta.
 
 <Info>
-  Todos los cambios realizados sobre el caso —actualizaciones de estado, archivos adjuntos y observaciones— se guardan en tiempo real en la colección `Revisa` de Firestore y son visibles de inmediato para el cliente en su panel de usuario. No es necesario realizar ninguna acción adicional para notificar al cliente; el campo `notificacion_cliente: true` se establece automáticamente al guardar la respuesta.
+  Todos los cambios realizados sobre el caso —actualizaciones de estado, archivos adjuntos y observaciones— se guardan en tiempo real en la colección `Revisa` de Firestore. El documento se actualiza con los campos `fecha_respuesta`, `fecha_respuesta_formateada`, `notificacion_cliente: true`, `documentos_repuestas`, `respuesta` y `estatus: "Completo"`. Los cambios son visibles de inmediato para el cliente en su panel de usuario sin ninguna acción adicional.
 </Info>

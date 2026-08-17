@@ -44,7 +44,11 @@ Los campos del plan gratuito se configuran de la siguiente forma en el sistema:
   "cant_asesoria": 1,
   "cant_revisa": 0,
   "cant_redacta": 0,
+  "fecha_subscripcion": "DD/MM/YYYY",
+  "fecha_vencimiento": "DD/MM/YYYY",
   "precio": 0,
+  "notificacion_expiracion": false,
+  "estatus": true,
   "gratuito": true,
   "solo_asesoria": true,
   "asesoria_gratis_usada": false
@@ -72,7 +76,7 @@ El campo `estatus` indica en qué fase se encuentra el plan del usuario en cada 
 
 | Valor de `estatus` | Significado |
 |---|---|
-| `"Pendiente"` | El plan fue seleccionado pero el pago aún no ha sido verificado. Los servicios no están disponibles. |
+| `"Pendiente"` | El plan fue seleccionado y el pago enviado, pero aún no ha sido procesado. Al iniciar sesión de nuevo, el sistema activa el plan automáticamente si el pago es detectado. |
 | `"Activo"` / `"Aprobado"` / `true` | El plan está activo y los cupos están disponibles para su uso. |
 | `false` / `"Inactivo"` / `"Expirado"` | Los cupos se han agotado o la `fecha_vencimiento` ha sido superada. El plan ya no permite acceder a servicios. |
 

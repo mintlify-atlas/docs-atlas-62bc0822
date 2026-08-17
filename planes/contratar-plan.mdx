@@ -63,11 +63,11 @@ Cuando seleccionas un plan y avanzas hacia el pago, el sistema construye y almac
 ```
 
 <Note>
-  Los campos **`cant_*`** comienzan en `0` en el momento de la contratación y se incrementan en una unidad cada vez que se consume el servicio correspondiente. Los campos **`total_*`** representan el cupo máximo incluido en el plan y no varían durante la vigencia del mismo.
+  Los campos **`cant_*`** comienzan en `0` mientras el plan está en estado `"Pendiente"`. Una vez aprobado el pago, el sistema los establece al valor de sus respectivos **`total_*`**, representando los cupos disponibles. Cada vez que se consume un servicio, el contador correspondiente **se decrementa en una unidad**. Los campos **`total_*`** representan el cupo máximo incluido en el plan y no varían durante la vigencia del mismo.
 
   La `fecha_vencimiento` es calculada automáticamente sumando la duración del plan (`duracion.cantidad` + `duracion.tipo`) a la fecha actual en el momento de la suscripción.
 </Note>
 
 <Warning>
-  Si tu cuenta tiene una **asesoría cubierta** por el plan gratuito de bienvenida (campo `asesoria_gratis_usada: false` con `cant_asesoria > 0`), el sistema detectará automáticamente que no es necesario realizar un cobro y te redirigirá directamente a la sección de asesoría sin pasar por la pasarela de pagos. Este comportamiento aplica **únicamente** para la asesoría gratuita; los servicios de Revisa y Redacta siempre requieren un plan de pago activo.
+  Si tu cuenta tiene una **asesoría cubierta sin costo** —es decir, el plan está activo (`estatus: true`), el campo `asesoria_gratis_usada` es `false` y `cant_asesoria > 0`— el sistema detectará automáticamente que no es necesario realizar un cobro y te redirigirá directamente a la sección de asesoría sin pasar por la pasarela de pagos. Este comportamiento aplica **únicamente** para la asesoría gratuita de bienvenida; los servicios de Revisa y Redacta siempre requieren un plan de pago activo.
 </Warning>

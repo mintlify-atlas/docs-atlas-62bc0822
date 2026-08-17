@@ -46,7 +46,7 @@ Al hacer clic en el ícono de expansión de cualquier fila se despliega informac
 
 ## Eliminar un asociado
 
-Para retirar un aliado del sistema utiliza el ícono de eliminar en la fila correspondiente. Se mostrará el modal de confirmación (`deleteModal` o `deleteModalAliado` según el tipo de registro).
+Para retirar un aliado del sistema utiliza el ícono de eliminar en la fila correspondiente. Se mostrará el modal de confirmación (`DeleteModal` o `DeleteModalAliado` según el tipo de registro).
 
 <Warning>
   La eliminación de un asociado es una acción **irreversible**. Una vez confirmada, el registro desaparece de la colección `Aliados` en Firestore y no puede recuperarse. Verifica cuidadosamente que estás eliminando el registro correcto antes de confirmar.
@@ -64,7 +64,7 @@ Algunos planes de suscripción están marcados con `plan_Aliado: true`, lo que l
     En la tabla de planes, localiza los registros donde `plan_Aliado: true`.
   </Step>
   <Step title="Usar la acción de asignación">
-    Haz clic en el ícono de asignación (UserPlus) de ese plan para abrir `ModalAsignarAliado`, selecciona el aliado de la lista desplegable y confirma la operación.
+    Haz clic en el ícono de asignación (UserPlus) de ese plan para abrir el modal de asignación, selecciona el aliado de la lista desplegable y confirma la operación.
   </Step>
 </Steps>
 

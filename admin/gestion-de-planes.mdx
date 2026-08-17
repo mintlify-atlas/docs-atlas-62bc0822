@@ -61,11 +61,11 @@ Haz clic en el ícono de eliminación (papelera) en la fila correspondiente. Se 
 Para los planes marcados con `plan_Aliado: true`, aparece el ícono de asignación (UserPlus) en la columna de acciones. Al hacer clic:
 
 <Steps>
-  <Step title="Abrir ModalAsignarAliado">
-    Haz clic en el ícono de asignación (UserPlus) del plan aliado deseado.
+  <Step title="Abrir el modal de asignación">
+    Haz clic en el ícono de asignación (UserPlus) del plan aliado deseado. Se abre el modal **"Seleccionar aliado"**.
   </Step>
   <Step title="Seleccionar el aliado">
-    En el modal `ModalAsignarAliado`, selecciona el aliado de la lista desplegable. Los aliados disponibles se cargan desde la función `getCompaniasAliados`.
+    En el modal, selecciona el aliado de la lista desplegable. Los aliados disponibles se cargan desde la función `getCompaniasAliados`.
   </Step>
   <Step title="Confirmar la asignación">
     Haz clic en **"Asignar"**. Se mostrará un segundo modal de confirmación indicando el plan y el aliado seleccionados. Al confirmar, el sistema ejecuta `POST /api/planes/aliados/asignar` con el `planId` y el `aliadoUid` correspondientes, y actualiza los datos del aliado y sus usuarios en Firestore.

@@ -22,7 +22,7 @@ El registro está disponible en la ruta `/register`. Solo necesitas unos minutos
     | **Nombre completo** | Tu nombre y apellido tal como aparecen en tu documento de identidad. Se guarda como `nombre_completo`. |
     | **Cédula de identidad** | Número de cédula en formato `V-12.345.678`. Se guarda como `doc_identidad`. |
     | **Email** | Dirección de correo electrónico válida. Se usa como identificador de acceso. |
-    | **Contraseña** | Mínimo una combinación segura de letras y números. |
+    | **Contraseña** | Combinación segura de letras y números. |
     | **Confirmar contraseña** | Debe coincidir exactamente con el campo anterior. |
   </Step>
   <Step title="Acepta los Términos y Condiciones">
@@ -43,8 +43,9 @@ El registro está disponible en la ruta `/register`. Solo necesitas unos minutos
       "sexo": "",
       "num_tel": 0,
       "fecha_nac": "",
+      "fecha_nac_completa": "",
       "tipo_usuario": "client",
-      "foto_usuario": "https://firebasestorage.googleapis.com/...",
+      "foto_usuario": "https://firebasestorage.googleapis.com/v0/b/tpgapp-b5f15.appspot.com/o/Imagenes_Comunes%2Fuser_sin_imagen.png?alt=media&token=20dd6481-3113-4861-b875-e992a9489c99",
       "uid": "uid_generado_por_firebase",
       "plan": {}
     }
@@ -71,7 +72,7 @@ Si ya tienes una cuenta registrada, accede desde la pantalla principal en la rut
     Introduce la dirección de correo electrónico y la contraseña que registraste. Si olvidaste tu contraseña, haz clic en **¿Olvidaste tu contraseña?** para iniciar la recuperación.
   </Step>
   <Step title="Haz clic en Iniciar sesión">
-    El sistema llama a `auth.signInWithEmailAndPassword(email, password)` de Firebase Authentication para verificar tus credenciales. Si son incorrectas, aparecerá el mensaje: **"Correo electrónico o Contraseña inválida"**.
+    El sistema llama a `auth.signInWithEmailAndPassword(email, password)` de Firebase Authentication para verificar tus credenciales. Si son incorrectas, aparecerá el mensaje: **"Correo eléctronico o Contraseña invalida"**.
   </Step>
   <Step title="Redirección según tu rol">
     Una vez verificadas las credenciales, el sistema consulta tu documento en la colección `Usuarios` (o `Aliados`) y redirige según el campo `tipo_usuario`:
@@ -98,18 +99,18 @@ Si olvidaste tu contraseña, puedes solicitar un correo de recuperación directa
     Introduce la dirección de correo electrónico asociada a tu cuenta de TGP Consultores.
   </Step>
   <Step title="Haz clic en Recuperar contraseña">
-    El sistema ejecuta `auth.sendPasswordResetEmail(email)`. Si el correo existe en Firebase Authentication, recibirás un enlace de restablecimiento en tu bandeja de entrada en pocos minutos.
+    El sistema ejecuta `auth.sendPasswordResetEmail(email)`. Si el correo existe en Firebase Authentication, recibirás un enlace de restablecimiento en tu bandeja de entrada en pocos minutos. Si el envío falla, aparecerá un aviso de error indicándote que lo intentes de nuevo.
   </Step>
   <Step title="Sigue el enlace en tu correo">
     Abre el correo enviado por Firebase, haz clic en el enlace de recuperación y establece una nueva contraseña. El enlace tiene una vigencia limitada por seguridad.
   </Step>
   <Step title="Inicia sesión con tu nueva contraseña">
-    Una vez restablecida la contraseña, regresa a `/login` e ingresa con tus credenciales actualizadas.
+    Una vez restablecida la contraseña, serás redirigido automáticamente a `/login`. Ingresa con tus credenciales actualizadas.
   </Step>
 </Steps>
 
 ## Primera asesoría gratuita
 
 <Tip>
-  Los usuarios nuevos que inician sesión **sin un plan asignado** (`plan: {}`) reciben automáticamente **1 asesoría legal gratuita** al primer ingreso. El sistema detecta la ausencia de plan en el campo `plan` de tu documento en `Usuarios` y activa un plan de cortesía temporal que te permite agendar tu primera consulta jurídica sin costo adicional. Una vez utilizado, deberás contratar un plan para continuar usando los servicios. Visita la sección de [Planes](/planes) para conocer las opciones disponibles.
+  Los usuarios nuevos que inician sesión **sin un plan asignado** (`plan: {}`) reciben automáticamente **1 asesoría legal gratuita** al primer ingreso. El sistema detecta la ausencia de plan y activa un plan de cortesía (`Asesoría Gratuita`) con validez de 30 días que te permite agendar tu primera consulta jurídica sin costo adicional. Revisa y Redacta no están incluidos en este plan gratuito. Una vez utilizada la asesoría, deberás contratar un plan para continuar usando los servicios. Visita la sección de [Planes](/planes) para conocer las opciones disponibles.
 </Tip>

@@ -10,18 +10,19 @@ La sección **Mi Perfil** es el espacio donde puedes mantener tu información pe
 
 Todos los campos a continuación corresponden al documento del usuario en la colección `Usuarios` de Firestore. Puedes editarlos en cualquier momento desde la pantalla de perfil.
 
-| Campo en Firestore | Etiqueta en pantalla         | Descripción |
-|--------------------|------------------------------|-------------|
-| `nombre_completo`  | Nombre completo              | Tu nombre y apellido completos, tal como aparecen en tu documento de identidad. |
-| `doc_identidad`    | Documento de identidad       | Número de cédula de identidad (p. ej., `V-12.345.678`). |
-| `email`            | Correo electrónico           | La dirección de correo asociada a tu cuenta. Se usa para iniciar sesión y recibir notificaciones. |
-| `num_tel`          | Número telefónico            | Tu número de teléfono de contacto. |
-| `fecha_nac`        | Fecha de nacimiento          | Fecha almacenada en formato `DD/MM/YYYY`. |
-| `sexo`             | Sexo                         | Opciones disponibles: **Mujer** o **Hombre**. |
-| `direccion`        | Dirección                    | Tu dirección de residencia o correspondencia. |
-| `pais`             | País                         | País de residencia. |
-| `ciudad`           | Ciudad                       | Ciudad de residencia. |
-| `foto_usuario`     | Foto de perfil               | Imagen de avatar que se muestra en el panel. Soporta JPG, PNG o GIF. Se almacena en Firebase Storage. |
+| Campo en Firestore   | Etiqueta en pantalla         | Descripción |
+|----------------------|------------------------------|-------------|
+| `nombre_completo`    | Nombre completo              | Tu nombre y apellido completos, tal como aparecen en tu documento de identidad. |
+| `doc_identidad`      | Documento de identidad       | Número de cédula de identidad (p. ej., `V-12.345.678`). |
+| `email`              | Correo electrónico           | La dirección de correo asociada a tu cuenta. Se usa para iniciar sesión y recibir notificaciones. |
+| `num_tel`            | Número telefónico            | Tu número de teléfono de contacto. |
+| `fecha_nac`          | Fecha de nacimiento          | Fecha almacenada en formato `DD/MM/YYYY`. |
+| `fecha_nac_completa` | Fecha de nacimiento completa | Representación extendida de la fecha de nacimiento. |
+| `sexo`               | Sexo                         | Opciones disponibles: **Mujer** o **Hombre**. |
+| `direccion`          | Dirección                    | Tu dirección de residencia o correspondencia. |
+| `pais`               | País                         | País de residencia. |
+| `ciudad`             | Ciudad                       | Ciudad de residencia. |
+| `foto_usuario`       | Foto de perfil               | Imagen de avatar que se muestra en el panel. Soporta JPG, PNG o GIF. Se almacena en Firebase Storage. |
 
 ## Cómo actualizar tu perfil
 
@@ -49,7 +50,7 @@ El formulario de perfil guarda cada cambio directamente en tu documento de la co
 ## Estado de tu plan
 
 <Note>
-  El resumen de tu membresía — incluyendo el **nombre del plan** (`nombre_plan`), los **cupos restantes** para cada servicio y la **fecha de vencimiento** (`fecha_vencimiento`) — no se muestra en la página de perfil. Puedes consultarlo desde el panel principal `/apps/dashboard_user`, haciendo clic en el botón **Plan Activo** (o **Planes** si aún no tienes uno asignado) en la columna izquierda. Si tu plan ha vencido, el sistema lo detecta automáticamente al cargar el panel y actualiza el campo `estatus` en Firestore.
+  El resumen de tu membresía — incluyendo el **nombre del plan** (`nombre_plan`), los **cupos restantes** para cada servicio (`cant_asesoria`, `cant_revisa`, `cant_redacta`) y la **fecha de vencimiento** (`fecha_vencimiento`) — no se muestra en la página de perfil. Puedes consultarlo desde el panel principal `/apps/dashboard_user`, haciendo clic en el botón **Plan Activo** (o **Planes** si aún no tienes uno asignado) en la columna izquierda. Si tu plan ha vencido, el sistema lo detecta automáticamente al cargar el panel y actualiza el campo `estatus` en Firestore.
 </Note>
 
 ## Seguridad

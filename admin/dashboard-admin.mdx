@@ -31,18 +31,15 @@ Desde el dashboard de administración puedes navegar a las cuatro áreas princip
 
 ## Precios y configuración
 
-Directamente desde el dashboard, los administradores pueden actualizar los precios unitarios de cada servicio haciendo clic en el botón **"Configurar Precios"**. Los campos editables son:
+Directamente desde el dashboard, los administradores pueden actualizar los precios unitarios de cada servicio haciendo clic en el botón **"Configurar Precios"**. El modal muestra un campo de entrada para cada uno de los tres servicios activos:
 
 | Campo | Descripción |
 |---|---|
 | `precio_redacta` | Precio del servicio Redacta en USD |
 | `precio_revisa` | Precio del servicio Revisa en USD |
 | `precio_asesoria` | Precio del servicio Asesoría en USD |
-| `precio_membresia_mensual` | Precio de membresía mensual en USD |
-| `precio_membresia_semestral` | Precio de membresía semestral en USD |
-| `precio_membresia_anual` | Precio de membresía anual en USD |
 
-Los cambios se almacenan en la colección de Firestore `Configuracion`, documento `precios`, junto con el campo `fecha_actualizacion` que registra automáticamente el momento de la última modificación. Desde el mismo perfil del administrador también puedes acceder a `/apps/listadoplanes` para gestionar los planes de suscripción.
+Los cambios se almacenan en la colección de Firestore `Configuracion`, documento `precios`, junto con el campo `fecha_actualizacion` que registra automáticamente el momento de la última modificación. El documento `precios` también conserva los campos `precio_membresia_mensual`, `precio_membresia_semestral` y `precio_membresia_anual` utilizados en el cálculo de suscripciones. Desde el mismo perfil del administrador también puedes acceder a `/apps/listadoplanes` para gestionar los planes de suscripción.
 
 ## Tipos de documentos y servicios activos
 
@@ -52,7 +49,7 @@ El dashboard muestra en tiempo real las solicitudes de servicio agrupadas por ti
 - **Revisa** — documentos enviados por los clientes para revisión profesional.
 - **Asesoría** — citas de consultoría agendadas por los clientes.
 
-Al seleccionar un usuario en el panel lateral izquierdo (`SidebarLeft`), el panel derecho (`SidebarRight`) filtra y muestra únicamente los documentos o servicios asociados a ese usuario, incluyendo su información de contacto y el estado de cada caso.
+Al seleccionar un usuario en el panel lateral izquierdo (`SidebarLeft`), el panel de documentos filtra y muestra los casos correspondientes a ese usuario a través del componente `SidebarRight`, junto con el estado de cada caso.
 
 <Note>
   El panel de administración es exclusivo para cuentas con `tipo_usuario: 'admin'`. Las cuentas de clientes regulares siempre son redirigidas a `/apps/dashboard_user` y no tienen visibilidad sobre las funciones descritas en esta sección.
