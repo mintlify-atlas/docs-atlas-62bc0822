@@ -1,0 +1,60 @@
+---
+title: "Detalle de Redacción: Revisión de Documentos por el Administrador"
+sidebarTitle: "Detalle Redacta"
+description: "Visualiza y gestiona un documento redactado por un cliente desde el panel de administrador de TGP Consultores en /apps/redactar/detalledoc/:id."
+---
+
+La vista de detalle de Redacta del administrador (`/apps/redactar/detalledoc/:id`) permite revisar en profundidad un documento generado por un cliente a través del servicio de redacción asistida de TGP Consultores. Desde aquí el administrador puede visualizar el contenido del documento, consultar los datos del caso y adjuntar la respuesta para completar el servicio.
+
+## Información disponible
+
+El componente `PreviewCard` ocupa la sección principal de la vista y muestra el contenido completo del documento. A la derecha se presentan dos tarjetas con los metadatos del caso:
+
+**Detalles del servicio:**
+
+| Campo | Descripción |
+|---|---|
+| `estatus` | Estado actual del caso (ej. `Pendiente`, `Completo`) |
+| `tipo_doc` | Tipo de documento solicitado (ej. `Mercantiles`, `Civil`) |
+| `categoria_doc` | Categoría del documento |
+| `sub_categoria_doc` | Subcategoría del documento |
+| `fecha_creacion_formateada` | Fecha de creación del caso formateada |
+
+**Detalles del usuario:**
+
+| Campo | Descripción |
+|---|---|
+| `user_nombre_completo` | Nombre completo del cliente |
+| `user_email` | Correo electrónico del cliente |
+
+Toda la información del caso se carga desde la colección `Redacta` de Firestore usando el `id` del parámetro de ruta.
+
+## Acciones disponibles
+
+El componente `PreviewActions` agrupa las acciones que el administrador puede ejecutar sobre el caso:
+
+- **Descargar documento** — genera y descarga el documento en formato `.docx` usando `html-to-docx`. El nombre del archivo incluye el tipo, categoría, subcategoría y nombre del cliente.
+- **Imprimir** — abre el documento en una ventana de impresión del navegador.
+- **Responder al caso** — abre el modal **"Formulario de respuesta"** donde el administrador puede subir uno o varios archivos de respuesta y añadir observaciones en texto libre antes de confirmar.
+- **Ver respuesta** — si el caso ya fue respondido, muestra el modal con los documentos de respuesta y las observaciones enviadas al cliente.
+- **Completar campos adicionales** — disponible cuando `formulario_respuesta_extra: true`; abre un formulario con campos específicos según la categoría del documento (ej. datos del contador para *Certificación de Ingresos*, datos del comisario para *Aceptación del Cargo de Comisario*).
+
+Al guardar la respuesta el sistema actualiza el documento en la colección `Redacta` con los campos:
+
+```
+fecha_respuesta, fecha_respuesta_formateada, notificacion_cliente: true,
+doc_respuesta: [...], observaciones_respuesta, estatus: "Completo"
+```
+
+Los archivos adjuntos se almacenan en Firebase Storage bajo la ruta `Redacta/{uid}/Documentos/{nombre_archivo}`.
+
+## Cómo acceder
+
+La ruta a este detalle puede alcanzarse de dos formas:
+
+1. **Desde el listado de servicios:** navega a `/apps/servicios/listado` → pestaña **Redacta** → haz clic en el caso deseado.
+2. **Directamente por URL:** accede a `/apps/redactar/detalledoc/:id` sustituyendo `:id` por el identificador del documento en Firestore.
+
+<Note>
+  El `PreviewCard` renderiza el documento en formato HTML para su visualización en pantalla. El botón de descarga convierte ese mismo HTML a un archivo `.docx` mediante la librería `html-to-docx` antes de enviarlo al navegador. Si el `id` de la ruta no corresponde a ningún documento en la colección `Redacta`, la vista muestra una alerta de error con un enlace de retorno al listado de casos.
+</Note>

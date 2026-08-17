@@ -1,0 +1,54 @@
+---
+title: "Detalle de Documento Redactado en TGP Consultores"
+sidebarTitle: "Detalle Redacta"
+description: "Consulta, descarga y revisa el documento legal generado con el servicio Redacta de TGP Consultores desde la vista de detalle."
+---
+
+La página de detalle del servicio Redacta, disponible en `/apps/misdocumentos/detalleredacta/:uid`, muestra el contenido completo del documento legal generado a través del servicio Redacta. Una vez dentro, puedes previsualizar el documento, consultar el estado del caso y, cuando el equipo haya respondido, acceder al detalle de la respuesta profesional emitida.
+
+## Información disponible
+
+La vista de detalle presenta la siguiente información organizada en dos columnas: la tarjeta del documento a la izquierda y el panel de acciones a la derecha.
+
+- **Tipo de documento** — El tipo de contrato o instrumento legal que fue seleccionado al crear el caso (campo `tipo_doc`).
+- **Categoría y subcategoría** — La clasificación del documento según la categoría (`categoria_doc`) y subcategoría (`sub_categoria_doc`) elegidas.
+- **Estatus del caso** — Estado actual del trámite: `Pendiente`, `En proceso` o `Completado`.
+- **Datos del usuario** — Nombre completo y correo electrónico del solicitante asociado al caso.
+- **Vista previa del documento** — El contenido del documento se renderiza directamente en la tarjeta principal (`PreviewCard`) utilizando la plantilla generada por el sistema.
+- **Documentos de respuesta** — Si el caso ya fue atendido, el panel de respuesta lista los archivos adjuntos por el abogado junto con las observaciones correspondientes.
+
+## Cómo acceder al detalle
+
+<Steps>
+  <Step title="Ve a Mis Documentos">
+    Dirígete a `/apps/misdocumentos` desde el menú de navegación principal.
+  </Step>
+  <Step title="Selecciona la pestaña Redacta">
+    Haz clic en la pestaña **Redacta** para ver el listado de todos tus documentos generados con este servicio.
+  </Step>
+  <Step title="Haz clic en el ID del documento">
+    En la columna **ID** de la tabla, haz clic sobre el identificador del caso que deseas consultar. Serás redirigido automáticamente a `/apps/misdocumentos/detalleredacta/:uid`.
+  </Step>
+  <Step title="Revisa la vista previa">
+    El contenido del documento se carga de forma automática desde la base de datos y se muestra en la tarjeta principal. El panel lateral derecho muestra el estatus, los datos del usuario y las acciones disponibles.
+  </Step>
+</Steps>
+
+## Consultar la respuesta del profesional
+
+Cuando el equipo legal haya procesado tu caso, el botón **Detalle de respuesta** se habilitará en el panel de acciones (`PreviewActions`). Al hacer clic abrirá un modal con la siguiente información:
+
+- Lista de documentos de respuesta adjuntados por el abogado, con opción de visualizarlos directamente.
+- Observaciones y comentarios escritos por el profesional en el campo de observaciones.
+
+<Tip>
+  Si el estatus de tu caso aún figura como **Pendiente**, el botón de respuesta aparecerá deshabilitado con el mensaje "Esperando Respuesta". Vuelve a consultar el detalle una vez que el equipo haya actualizado el caso.
+</Tip>
+
+## Descargar el documento
+
+Desde el panel de acciones lateral puedes utilizar la opción de impresión disponible en el componente `PreviewActions` para generar una copia del documento. Esta acción abre el documento en una nueva ventana optimizada para impresión o exportación como PDF desde el navegador.
+
+<Note>
+  Si la vista previa del documento no carga correctamente, verifica que tu navegador permita la renderización de contenido dinámico o intenta recargar la página. Si el problema persiste, asegúrate de que el ID del documento en la URL sea válido y corresponda a un caso registrado en tu cuenta.
+</Note>

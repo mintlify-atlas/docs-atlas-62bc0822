@@ -1,0 +1,81 @@
+---
+title: "Planes de Suscripción de TGP Consultores"
+sidebarTitle: "Planes"
+description: "Elige el plan de TGP Consultores que mejor se adapte a tus necesidades. Cada plan incluye cupos de asesorías, revisiones y redacciones de documentos."
+---
+
+TGP Consultores funciona bajo un modelo de suscripción en el que cada plan otorga al usuario un número definido de usos —llamados **cupos**— para cada uno de los tres servicios principales de la plataforma: **Asesoría** (consultoría jurídica), **Revisa** (revisión de documentos) y **Redacta** (redacción de documentos). Los precios de todos los planes están expresados en **dólares estadounidenses (USD)**.
+
+## ¿Qué incluye un plan?
+
+Cada plan registra tres contadores independientes que representan los cupos disponibles para cada servicio. Al consumir un servicio, el contador correspondiente se decrementa en una unidad.
+
+<CardGroup cols={3}>
+  <Card title="Asesoría" icon="comments">
+    Consultoría jurídica en línea. Controlada por el campo **`cant_asesoria`**. Cada sesión de asesoría descuenta 1 cupo.
+  </Card>
+  <Card title="Revisa" icon="file-magnifying-glass">
+    Revisión profesional de documentos legales. Controlada por el campo **`cant_revisa`**. Cada revisión descuenta 1 cupo.
+  </Card>
+  <Card title="Redacta" icon="pen-nib">
+    Redacción de documentos legales a medida. Controlada por el campo **`cant_redacta`**. Cada redacción descuenta 1 cupo.
+  </Card>
+</CardGroup>
+
+Los campos `cant_asesoria`, `cant_revisa` y `cant_redacta` reflejan los **cupos restantes** en tiempo real. Cuando cualquiera de estos contadores llega a cero, ese servicio en particular deja de estar disponible hasta que el usuario renueve o contrate un nuevo plan.
+
+## Plan gratuito de bienvenida
+
+<Tip>
+  Todo usuario nuevo que aún no tenga un plan asignado recibe automáticamente un **plan promocional gratuito** al iniciar sesión por primera vez. Este plan se denomina **"Asesoría Gratuita"** e incluye exactamente **1 consultoría legal** sin costo. El plan tiene una vigencia de **30 días** a partir de la fecha de asignación.
+
+  Los servicios de **Revisa** y **Redacta** **no están incluidos** en el plan gratuito —sus cupos se establecen en 0—, por lo que para utilizarlos es necesario contratar un plan de pago.
+</Tip>
+
+Los campos del plan gratuito se configuran de la siguiente forma en el sistema:
+
+```json
+{
+  "id": "plan-gratuito",
+  "nombre_plan": "Asesoría Gratuita",
+  "total_asesoria": 1,
+  "total_revisa": 0,
+  "total_redacta": 0,
+  "cant_asesoria": 1,
+  "cant_revisa": 0,
+  "cant_redacta": 0,
+  "precio": 0,
+  "gratuito": true,
+  "solo_asesoria": true,
+  "asesoria_gratis_usada": false
+}
+```
+
+Una vez utilizada la asesoría gratuita, el campo `asesoria_gratis_usada` se establece en `true` y cualquier servicio posterior —incluida una segunda asesoría— requerirá un plan de pago.
+
+## Duración de los planes
+
+Cada plan define su duración mediante dos atributos que trabajan en conjunto:
+
+| Campo | Descripción |
+|---|---|
+| `duracion.cantidad` | Valor numérico que representa la magnitud de la duración (p. ej. `1`, `3`, `12`). |
+| `duracion.tipo` | Unidad de tiempo utilizada (p. ej. `days`, `months`). |
+
+La **fecha de vencimiento** (`fecha_vencimiento`) se calcula automáticamente sumando la duración del plan a la **fecha de suscripción** (`fecha_subscripcion`), es decir, la fecha en que el usuario contrató el plan. Ambas fechas se almacenan en formato `DD/MM/YYYY`.
+
+Una vez superada la `fecha_vencimiento`, los servicios del plan dejan de estar disponibles y el sistema marca el plan como expirado. Para volver a utilizar los servicios es necesario **renovar o contratar un nuevo plan**.
+
+## Estado del plan
+
+El campo `estatus` indica en qué fase se encuentra el plan del usuario en cada momento:
+
+| Valor de `estatus` | Significado |
+|---|---|
+| `"Pendiente"` | El plan fue seleccionado pero el pago aún no ha sido verificado. Los servicios no están disponibles. |
+| `"Activo"` / `"Aprobado"` / `true` | El plan está activo y los cupos están disponibles para su uso. |
+| `false` / `"Inactivo"` / `"Expirado"` | Los cupos se han agotado o la `fecha_vencimiento` ha sido superada. El plan ya no permite acceder a servicios. |
+
+<Note>
+  El resumen de tu plan activo —incluyendo los cupos restantes de cada servicio y la fecha de vencimiento— es visible en la parte superior de tu **panel de usuario** (`/apps/dashboard_user`). Si el plan se encuentra en estado `"Pendiente"` o ha expirado, el panel mostrará la opción de contratar o renovar un plan.
+</Note>

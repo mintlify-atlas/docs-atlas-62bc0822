@@ -1,0 +1,199 @@
+---
+title: "Métodos de Pago Disponibles en TGP Consultores"
+sidebarTitle: "Métodos de Pago"
+description: "TGP Consultores acepta C2P, tarjeta de crédito/débito, transferencias bancarias VCBU y débito inmediato para procesar pagos de planes y servicios."
+---
+
+TGP Consultores integra una pasarela de pagos multimétodo que admite cuatro modalidades de pago del sistema bancario venezolano. Al acceder a la sección de pagos (`/apps/pagos`), encontrarás un asistente de dos pasos: en el primero seleccionas el método y completas el formulario, y en el segundo revisas y confirmas la información antes de procesar el pago.
+
+## Métodos de pago disponibles
+
+<Tabs>
+  <Tab title="C2P (Cobro por Celular)">
+    El **Cobro por Celular (C2P)** es una modalidad de pago inmediato que vincula tu número de teléfono móvil con tu cuenta bancaria. Para completar el pago necesitarás tener habilitado el servicio C2P en tu banco.
+
+    **Campos requeridos:**
+
+    | Campo | Descripción |
+    |---|---|
+    | `titular_C2P` | Nombre completo del titular de la cuenta. |
+    | `cedula_C2P` | Número de cédula de identidad del titular. |
+    | `nacionalidad_C2P` | Nacionalidad del titular. Valores: `V` (venezolano) o `E` (extranjero). |
+    | `motivo_C2P` | Descripción o concepto del pago. |
+    | `telefono_C2P` | Número de teléfono móvil registrado en el banco para el servicio C2P. |
+    | `email_C2P` | Correo electrónico del titular. |
+    | `token_C2P` | Token de autorización generado por el banco para la transacción. |
+    | `monto_C2P` | Monto a pagar en bolívares (VES). |
+    | `banco_C2P` | Código o identificador del banco emisor. |
+
+    **Pasos para completar el pago C2P:**
+
+    <Steps>
+      <Step title="Ingresa el nombre del titular">
+        Escribe el nombre completo del titular de la cuenta bancaria en el campo `titular_C2P`.
+      </Step>
+      <Step title="Ingresa tu cédula de identidad">
+        Completa el campo `cedula_C2P` con tu número de cédula y selecciona tu nacionalidad (`V` / `E`) en `nacionalidad_C2P`.
+      </Step>
+      <Step title="Ingresa tu número de teléfono">
+        Escribe el número de teléfono móvil asociado a tu cuenta en el campo `telefono_C2P`.
+      </Step>
+      <Step title="Ingresa el token de autorización">
+        Solicita el token a tu banco (usualmente vía SMS o app bancaria) e ingrésalo en el campo `token_C2P`.
+      </Step>
+      <Step title="Confirma el banco y el monto">
+        Verifica que el banco seleccionado en `banco_C2P` y el monto en `monto_C2P` sean correctos.
+      </Step>
+      <Step title="Envía el formulario">
+        Haz clic en **Siguiente** para avanzar al paso de confirmación y luego en **Confirmar Pago** para procesar la transacción.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="TDC (Tarjeta de Crédito/Débito)">
+    La modalidad **TDC** permite realizar pagos con tarjeta de crédito o débito emitida por un banco venezolano. El campo `modalidad_TDC` se establece automáticamente con el valor fijo `'TDC'` y no requiere intervención del usuario.
+
+    **Campos requeridos:**
+
+    | Campo | Descripción |
+    |---|---|
+    | `titular_TDC` | Nombre completo del titular de la tarjeta. |
+    | `ciRif_TDC` | Cédula de identidad o RIF del titular. |
+    | `nacionalidad_TDC` | Nacionalidad del titular. Valores: `V` (venezolano) o `E` (extranjero). |
+    | `cuentaTDC_TDC` | Número de tarjeta de crédito o débito. |
+    | `concepto_TDC` | Descripción o concepto del pago. |
+    | `monto_TDC` | Monto a pagar en bolívares (VES). |
+    | `CVV_TDC` | Código de seguridad de la tarjeta (CVV/CVC). |
+    | `fechaExp_TDC` | Fecha de vencimiento de la tarjeta (formato MM/AA). |
+    | `modalidad_TDC` | Modalidad fija: `TDC` (asignada automáticamente por el sistema). |
+
+    **Pasos para completar el pago TDC:**
+
+    <Steps>
+      <Step title="Ingresa los datos del titular">
+        Completa `titular_TDC`, `ciRif_TDC` y selecciona la `nacionalidad_TDC`.
+      </Step>
+      <Step title="Ingresa los datos de la tarjeta">
+        Escribe el número de tarjeta en `cuentaTDC_TDC`, el código CVV en `CVV_TDC` y la fecha de vencimiento en `fechaExp_TDC`.
+      </Step>
+      <Step title="Completa el concepto y el monto">
+        Verifica el `concepto_TDC` y el `monto_TDC` a debitar.
+      </Step>
+      <Step title="Confirma el pago">
+        Haz clic en **Siguiente** para revisar la información y luego en **Confirmar Pago**.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="VCBU (Transferencia Bancaria)">
+    La modalidad **VCBU** corresponde a una transferencia bancaria entre cuentas venezolanas. Internamente, el campo `modalidad_VCBU` se establece con el valor fijo `'BVC'`. El campo `tipoDatoCuentaBen_VCBU` indica el tipo de dato del beneficiario y tiene como valor por defecto `'CNTA'` (número de cuenta).
+
+    **Campos requeridos:**
+
+    | Campo | Descripción |
+    |---|---|
+    | `titular_VCBU` | Nombre completo del titular de la cuenta origen. |
+    | `ciRif_VCBU` | Cédula de identidad o RIF del titular. |
+    | `nacionalidad_VCBU` | Nacionalidad del titular. Valores: `V` (venezolano) o `E` (extranjero). |
+    | `cuentaTDC_VCB` | Número de cuenta bancaria origen. |
+    | `concepto_VCBU` | Descripción o concepto de la transferencia. |
+    | `correo_VCBU` | Correo electrónico del titular. |
+    | `monto_VCBU` | Monto a transferir en bolívares (VES). |
+    | `tipoDatoCuentaBen_VCBU` | Tipo de dato del beneficiario. Valor por defecto: `CNTA` (número de cuenta). |
+    | `codBancoBen_VCBU` | Código del banco beneficiario (banco destino). |
+    | `modalidad_VCBU` | Modalidad fija: `BVC` (asignada automáticamente por el sistema). |
+
+    **Pasos para completar el pago VCBU:**
+
+    <Steps>
+      <Step title="Ingresa los datos del titular">
+        Completa `titular_VCBU`, `ciRif_VCBU` y selecciona la `nacionalidad_VCBU`.
+      </Step>
+      <Step title="Ingresa el número de cuenta origen">
+        Escribe tu número de cuenta bancaria en el campo `cuentaTDC_VCB`.
+      </Step>
+      <Step title="Especifica el banco beneficiario">
+        Ingresa el código del banco destino en `codBancoBen_VCBU` y verifica que `tipoDatoCuentaBen_VCBU` sea `CNTA`.
+      </Step>
+      <Step title="Completa el concepto, correo y monto">
+        Rellena los campos `concepto_VCBU`, `correo_VCBU` y `monto_VCBU`.
+      </Step>
+      <Step title="Confirma la transferencia">
+        Haz clic en **Siguiente** para revisar la información y luego en **Confirmar Pago**.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="DI (Débito Inmediato)">
+    El **Débito Inmediato (DI)** permite debitar fondos directamente desde una cuenta bancaria de forma instantánea. Esta modalidad requiere un token de autorización y un identificador de seguimiento (`trackingId_DI`) generados por el banco. El campo `tipoDatoCuentaBen_DI` tiene el valor por defecto `'CNTA'`.
+
+    **Campos requeridos:**
+
+    | Campo | Descripción |
+    |---|---|
+    | `titular_DI` | Nombre completo del titular de la cuenta. |
+    | `ciRif_DI` | Cédula de identidad o RIF del titular. |
+    | `nacionalidad_DI` | Nacionalidad del titular. Valores: `V` (venezolano) o `E` (extranjero). |
+    | `tipoDatoCuentaBen_DI` | Tipo de dato del beneficiario. Valor por defecto: `CNTA` (número de cuenta). |
+    | `cuenta_DI` | Número de cuenta bancaria a debitar. |
+    | `codBancoBen_DI` | Código del banco donde se encuentra la cuenta a debitar. |
+    | `concepto_DI` | Descripción o concepto del débito. |
+    | `monto_DI` | Monto a debitar en bolívares (VES). |
+    | `trackingId_DI` | Identificador de seguimiento de la transacción, provisto por el banco. |
+    | `token_DI` | Token de autorización generado por el banco para la operación. |
+    | `di_id_pago` | Identificador único del pago asignado por el sistema de débito inmediato. |
+
+    **Pasos para completar el pago DI:**
+
+    <Steps>
+      <Step title="Ingresa los datos del titular">
+        Completa `titular_DI`, `ciRif_DI` y selecciona la `nacionalidad_DI`.
+      </Step>
+      <Step title="Ingresa los datos de la cuenta">
+        Escribe el número de cuenta en `cuenta_DI` y el código del banco en `codBancoBen_DI`. Verifica que `tipoDatoCuentaBen_DI` sea `CNTA`.
+      </Step>
+      <Step title="Ingresa el concepto y el monto">
+        Rellena los campos `concepto_DI` y `monto_DI`.
+      </Step>
+      <Step title="Ingresa el token y el trackingId">
+        Completa los campos `trackingId_DI`, `token_DI` y `di_id_pago` con los datos provistos por tu banco para autorizar la operación.
+      </Step>
+      <Step title="Confirma el débito">
+        Haz clic en **Siguiente** para revisar la información y luego en **Confirmar Pago**.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Proceso de confirmación
+
+Independientemente del método de pago elegido, todos los pagos siguen el mismo flujo de confirmación de dos pasos dentro de la pasarela:
+
+<Steps>
+  <Step title="Selecciona el método de pago">
+    En la pantalla de pagos (`/apps/pagos`), elige entre C2P, TDC, VCBU o DI según tu preferencia y disponibilidad bancaria.
+  </Step>
+  <Step title="Completa todos los campos requeridos">
+    Rellena el formulario con los datos correspondientes a tu método de pago seleccionado. Todos los campos marcados son obligatorios.
+  </Step>
+  <Step title="Avanza al paso de confirmación">
+    Haz clic en **Siguiente**. El asistente de pago avanzará al paso **"Confirmar Información"**, donde podrás revisar un resumen de todos los datos ingresados.
+  </Step>
+  <Step title="Revisa la información">
+    Comprueba que todos los datos sean correctos —especialmente el monto, el número de cuenta o tarjeta y los datos del titular— antes de continuar.
+  </Step>
+  <Step title="Confirma el pago">
+    Haz clic en **Confirmar Pago** para enviar la solicitud de pago a la entidad bancaria.
+  </Step>
+  <Step title="Espera la respuesta del sistema">
+    El sistema procesa la transacción con el banco. Ante una respuesta exitosa, tu plan se activa automáticamente, su estatus cambia a **`"Activo"`** y los cupos de los servicios quedan disponibles de inmediato en tu cuenta.
+  </Step>
+</Steps>
+
+<Note>
+  Los montos de los planes están denominados en **dólares estadounidenses (USD)**, pero el cargo bancario se realiza en **bolívares venezolanos (VES)**. La conversión se efectúa automáticamente utilizando la tasa de cambio configurada por el administrador de la plataforma.
+</Note>
+
+<Warning>
+  **No cierres el navegador ni recargues la página mientras el pago está siendo procesado.** Si la sesión expira o la conexión se interrumpe durante el procesamiento, el estado de tu plan podría quedar como `"Pendiente"`. En ese caso, comunícate con el equipo de soporte de TGP Consultores para regularizar tu suscripción.
+</Warning>

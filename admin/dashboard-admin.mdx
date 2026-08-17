@@ -1,0 +1,59 @@
+---
+title: "Panel de Administración de TGP Consultores"
+sidebarTitle: "Dashboard Admin"
+description: "El panel de administración de TGP Consultores centraliza la gestión de usuarios, servicios activos, asociados y configuración de precios en una sola vista."
+---
+
+El panel de administración (`/apps/dashboard`) es el centro de control para los administradores de TGP Consultores. Desde aquí se obtiene una visión en tiempo real de las solicitudes de servicios activas y se accede con rapidez a todas las secciones de gestión: usuarios, asociados, planes y configuración de precios.
+
+## ¿Quién puede acceder?
+
+Solo los usuarios cuyo campo `tipo_usuario` tenga el valor `'admin'` en Firestore son redirigidos al panel de administración tras iniciar sesión. Cualquier otra cuenta —ya sea de tipo `'client'` o `'aliado'`— es redirigida automáticamente a `/apps/dashboard_user`, sin acceso a las funciones administrativas.
+
+## Secciones disponibles
+
+Desde el dashboard de administración puedes navegar a las cuatro áreas principales de gestión de la plataforma:
+
+<CardGroup cols={2}>
+  <Card title="Gestión de Usuarios" icon="users" href="/admin/gestion-de-usuarios">
+    Consulta, edita y administra todos los usuarios registrados, sus planes activos e historial de actividad.
+  </Card>
+  <Card title="Gestión de Asociados" icon="handshake" href="/admin/gestion-de-asociados">
+    Administra los aliados y socios profesionales vinculados a TGP Consultores, incluyendo alta, edición y baja de registros.
+  </Card>
+  <Card title="Gestión de Planes" icon="layer-group" href="/admin/gestion-de-planes">
+    Crea, edita y elimina los planes de suscripción disponibles para clientes y aliados, con sus cupos y precios en USD.
+  </Card>
+  <Card title="Listado de Servicios" icon="list" href="/admin/servicios/listado-de-servicios">
+    Revisa y gestiona todas las solicitudes de servicio activas (Redacta, Revisa, Asesoría) enviadas por los clientes.
+  </Card>
+</CardGroup>
+
+## Precios y configuración
+
+Directamente desde el dashboard, los administradores pueden actualizar los precios unitarios de cada servicio haciendo clic en el botón **"Configurar Precios"**. Los campos editables son:
+
+| Campo | Descripción |
+|---|---|
+| `precio_redacta` | Precio del servicio Redacta en USD |
+| `precio_revisa` | Precio del servicio Revisa en USD |
+| `precio_asesoria` | Precio del servicio Asesoría en USD |
+| `precio_membresia_mensual` | Precio de membresía mensual en USD |
+| `precio_membresia_semestral` | Precio de membresía semestral en USD |
+| `precio_membresia_anual` | Precio de membresía anual en USD |
+
+Los cambios se almacenan en la colección de Firestore `Configuracion`, documento `precios`, junto con el campo `fecha_actualizacion` que registra automáticamente el momento de la última modificación. Desde el mismo perfil del administrador también puedes acceder a `/apps/listadoplanes` para gestionar los planes de suscripción.
+
+## Tipos de documentos y servicios activos
+
+El dashboard muestra en tiempo real las solicitudes de servicio agrupadas por tipo mediante tres pestañas interactivas:
+
+- **Redacta** — documentos generados por los clientes a través del formulario de redacción.
+- **Revisa** — documentos enviados por los clientes para revisión profesional.
+- **Asesoría** — citas de consultoría agendadas por los clientes.
+
+Al seleccionar un usuario en el panel lateral izquierdo (`SidebarLeft`), el panel derecho (`SidebarRight`) filtra y muestra únicamente los documentos o servicios asociados a ese usuario, incluyendo su información de contacto y el estado de cada caso.
+
+<Note>
+  El panel de administración es exclusivo para cuentas con `tipo_usuario: 'admin'`. Las cuentas de clientes regulares siempre son redirigidas a `/apps/dashboard_user` y no tienen visibilidad sobre las funciones descritas en esta sección.
+</Note>

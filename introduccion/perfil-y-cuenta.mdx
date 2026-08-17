@@ -1,0 +1,63 @@
+---
+title: "Edita tu Perfil y Configuración de Cuenta en TGP Consultores"
+sidebarTitle: "Perfil y Cuenta"
+description: "Actualiza tus datos personales, foto de perfil, dirección y configuración de seguridad desde la sección Mi Perfil de TGP Consultores."
+---
+
+La sección **Mi Perfil** es el espacio donde puedes mantener tu información personal actualizada dentro de la plataforma. Está accesible en cualquier momento desde la barra de navegación superior, en la ruta `/miperfil`, o haciendo clic en tu nombre o avatar en el panel de cliente. Mantener tus datos al día es importante: el nombre completo, la cédula y los datos de contacto se utilizan directamente en los documentos que redactas y en las comunicaciones con los asesores jurídicos.
+
+## Datos que puedes actualizar
+
+Todos los campos a continuación corresponden al documento del usuario en la colección `Usuarios` de Firestore. Puedes editarlos en cualquier momento desde la pantalla de perfil.
+
+| Campo en Firestore | Etiqueta en pantalla         | Descripción |
+|--------------------|------------------------------|-------------|
+| `nombre_completo`  | Nombre completo              | Tu nombre y apellido completos, tal como aparecen en tu documento de identidad. |
+| `doc_identidad`    | Documento de identidad       | Número de cédula de identidad (p. ej., `V-12.345.678`). |
+| `email`            | Correo electrónico           | La dirección de correo asociada a tu cuenta. Se usa para iniciar sesión y recibir notificaciones. |
+| `num_tel`          | Número telefónico            | Tu número de teléfono de contacto. |
+| `fecha_nac`        | Fecha de nacimiento          | Fecha almacenada en formato `DD/MM/YYYY`. |
+| `sexo`             | Sexo                         | Opciones disponibles: **Mujer** o **Hombre**. |
+| `direccion`        | Dirección                    | Tu dirección de residencia o correspondencia. |
+| `pais`             | País                         | País de residencia. |
+| `ciudad`           | Ciudad                       | Ciudad de residencia. |
+| `foto_usuario`     | Foto de perfil               | Imagen de avatar que se muestra en el panel. Soporta JPG, PNG o GIF. Se almacena en Firebase Storage. |
+
+## Cómo actualizar tu perfil
+
+El formulario de perfil guarda cada cambio directamente en tu documento de la colección `Usuarios` en Firestore mediante una operación `update`.
+
+<Steps>
+  <Step title="Accede a Mi Perfil">
+    Desde el panel de cliente en `/apps/dashboard_user`, haz clic en la tarjeta con tu foto y nombre ubicada en la columna izquierda del panel. Verás la opción **Editar perfil** debajo de tu nombre. También puedes acceder directamente navegando a `/miperfil`.
+  </Step>
+  <Step title="Actualiza tu foto de perfil (opcional)">
+    En la sección **Foto de perfil**, haz clic en **Subir foto** y selecciona una imagen desde tu dispositivo (formatos JPG, PNG o GIF). El sistema mostrará una barra de progreso mientras sube el archivo a Firebase Storage. Para volver a la imagen predeterminada, haz clic en **Reinicio**.
+  </Step>
+  <Step title="Edita tus datos personales">
+    En la sección **Datos personales** encontrarás los campos editables: `nombre_completo`, `doc_identidad`, `fecha_nac`, `pais`, `ciudad`, `direccion`, `sexo` y `num_tel`. Modifica los campos que necesites actualizar.
+
+    <Note>
+      El campo **Fecha de nacimiento** usa un selector de fecha. El valor se convierte automáticamente al formato `DD/MM/YYYY` antes de guardarse en Firestore.
+    </Note>
+  </Step>
+  <Step title="Guarda los cambios">
+    Haz clic en el botón **Guardar cambios** al final del formulario. El sistema actualizará tu documento en la colección `Usuarios` de Firestore y mostrará una notificación de confirmación: **"Perfil actualizado."** Los datos también se sincronizan en `localStorage` para reflejarse de inmediato en el panel.
+  </Step>
+</Steps>
+
+## Estado de tu plan
+
+<Note>
+  El resumen de tu membresía — incluyendo el **nombre del plan** (`nombre_plan`), los **cupos restantes** para cada servicio y la **fecha de vencimiento** (`fecha_vencimiento`) — no se muestra en la página de perfil. Puedes consultarlo desde el panel principal `/apps/dashboard_user`, haciendo clic en el botón **Plan Activo** (o **Planes** si aún no tienes uno asignado) en la columna izquierda. Si tu plan ha vencido, el sistema lo detecta automáticamente al cargar el panel y actualiza el campo `estatus` en Firestore.
+</Note>
+
+## Seguridad
+
+Para proteger el acceso a tu cuenta, TGP Consultores permite restablecer tu contraseña en cualquier momento mediante el flujo estándar de Firebase Authentication.
+
+Si deseas cambiar tu contraseña actual, cierra sesión y utiliza el enlace **¿Olvidaste tu contraseña?** en la pantalla de inicio de sesión (`/login`), o navega directamente a `/reset-password`. El sistema enviará un correo de restablecimiento a la dirección registrada en tu cuenta. Consulta la guía completa en [Registro y Acceso — Recuperar contraseña](/introduccion/registro-e-inicio-de-sesion#recuperar-contrasena).
+
+<Tip>
+  Mantén siempre actualizado tu correo electrónico de contacto. Es el único canal que utiliza TGP para enviarte el enlace de recuperación de contraseña y las notificaciones sobre el estado de tus trámites y documentos.
+</Tip>

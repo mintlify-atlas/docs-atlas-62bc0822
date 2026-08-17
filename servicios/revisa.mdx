@@ -1,0 +1,79 @@
+---
+title: "Revisa: Revisión Profesional de Documentos Legales"
+sidebarTitle: "Revisa"
+description: "Sube tu contrato o documento legal en TGP Consultores y recibe una revisión profesional por parte de un abogado especializado."
+---
+
+**Revisa** es el servicio de TGP Consultores pensado para quienes ya tienen un documento legal en mano y desean que un abogado especializado lo analice, corrija o valide. Sube el archivo, indica el tipo de documento, graba una nota de voz con el contexto de tu caso si lo deseas, y el equipo jurídico de TGP procesará tu solicitud y te enviará su respuesta directamente en la plataforma.
+
+## ¿Cómo usar Revisa?
+
+<Steps>
+  <Step title="Navega a Revisa">
+    Desde el panel principal, accede a **Revisa** en la ruta `/apps/revisa`. Verás el formulario de envío de documentos.
+  </Step>
+  <Step title="Selecciona el tipo de documento">
+    En el campo `tipo_doc`, elige la categoría que mejor describa el documento que vas a someter a revisión (por ejemplo, contrato de arrendamiento, poder notarial, contrato laboral, etc.).
+  </Step>
+  <Step title="Sube el documento">
+    Haz clic en el botón **Cargar archivos PDF** o arrastra el archivo al área de carga. Puedes agregar varios archivos antes de enviar. Cada archivo añadido aparecerá en la lista con su nombre; utiliza el ícono de eliminación (—) para quitar cualquier archivo que hayas cargado por error.
+  </Step>
+  <Step title="Graba una nota de voz (opcional)">
+    En la sección **Descripción del caso**, haz clic en el ícono del micrófono para iniciar la grabación. Explica verbalmente el contexto de tu consulta o las dudas puntuales sobre el documento. Haz clic de nuevo para detener la grabación. La nota quedará adjunta al caso.
+  </Step>
+  <Step title="Agrega instrucciones escritas">
+    En el campo **Descripción de inquietudes** puedes escribir comentarios adicionales, preguntas específicas o instrucciones para el abogado revisor.
+  </Step>
+  <Step title="Envía el caso">
+    Haz clic en **Siguiente**. La plataforma subirá los archivos y la nota de voz al almacenamiento, y creará el caso en Firestore con estado inicial **Pendiente**.
+  </Step>
+  <Step title="Consulta la respuesta">
+    Una vez que el administrador procese tu caso, la revisión y el documento corregido estarán disponibles en **Mis Documentos** → **Detalle Revisa** (`/apps/misdocumentos/detallerevisa/:uid`).
+  </Step>
+</Steps>
+
+## Formatos de archivo aceptados
+
+La plataforma utiliza un cargador de archivos nativo con soporte para selección múltiple. Se recomienda subir documentos en los formatos más habituales en el ámbito legal:
+
+- **PDF** — formato preferido para documentos ya firmados o escaneados
+- **Word / DOCX** — formato recomendado para documentos en borrador que requieran edición
+- **Otros formatos de texto** — según el tipo de documento
+
+<Note>
+  Puedes cargar más de un archivo por caso. Todos los archivos del mismo caso se agrupan bajo el mismo identificador único (`uid`) en el almacenamiento.
+</Note>
+
+## Nota de voz
+
+La función de grabación de voz te permite proporcionar contexto adicional de forma rápida y natural, sin necesidad de redactar un texto largo.
+
+<Tip>
+  La grabación utiliza la librería **MicRecorder** para capturar el audio y generar un archivo MP3. Puedes **iniciar**, **pausar** y **detener** la grabación usando los controles de reproducción que aparecen en la sección _Descripción del caso_. Una vez detenida la grabación, el archivo quedará listo para adjuntarse automáticamente al enviar el formulario.
+</Tip>
+
+## Estado de tu caso
+
+Al hacer clic en **Siguiente**, la plataforma crea un registro en Firestore con los siguientes campos de seguimiento:
+
+| Campo | Descripción |
+|---|---|
+| `uid` | Identificador único del caso, generado automáticamente |
+| `tipo_doc` | Tipo de documento seleccionado en el formulario |
+| `voice` | URL de la nota de voz en MP3 (vacío si no se grabó ninguna) |
+| `documentos` | Arreglo con los nombres y URLs de los archivos subidos |
+| `inquietudes` | Texto de instrucciones o comentarios escritos por el usuario |
+| `estatus` | Estado del caso (`Pendiente` al crearse) |
+| `fecha_creacion` | Fecha de creación en formato `DD/MM/YYYY` |
+| `fecha_creacion_formateada` | Fecha de creación formateada (`DD/MM/YYYY`) |
+| `fecha_respuesta` | Fecha en que el abogado emite su respuesta (se completa posteriormente) |
+
+<Warning>
+  Cada envío en Revisa consume **una cuota de revisa** de tu plan activo. Verifica que el campo `cant_revisa` de tu plan sea mayor a cero antes de enviar. Si la cuota está agotada, serás redirigido a la página de pagos (`/apps/pagos`) para contratar un nuevo plan.
+</Warning>
+
+## Recibir la respuesta
+
+<Info>
+  Una vez que el administrador procese tu caso, el documento revisado, los comentarios del abogado y cualquier archivo de respuesta quedarán disponibles en **Mis Documentos** → **Detalle Revisa** (`/apps/misdocumentos/detallerevisa/:uid`). También podrás ver el campo `estatus_pago` actualizado y la `fecha_respuesta` registrada en tu expediente.
+</Info>

@@ -1,0 +1,107 @@
+---
+title: "Configuración de Firebase en TGP Consultores"
+sidebarTitle: "Firebase"
+description: "Configura Firebase Authentication, Firestore y Storage para TGP Consultores. Aprende la estructura de colecciones y reglas de seguridad recomendadas."
+---
+
+TGP Consultores usa Firebase 8 como capa de backend principal. El SDK se inicializa una sola vez en `src/firebase/firebaseService.js` y exporta tres instancias de servicio —`database`, `authentication` y `storage`— que son importadas directamente por los componentes y servicios que las necesitan. La configuración del proyecto se inyecta a través de variables de entorno, con valores de fallback al proyecto de desarrollo para facilitar el trabajo local.
+
+## Servicios de Firebase utilizados
+
+<CardGroup cols={3}>
+  <Card title="Authentication" icon="shield-check">
+    Autenticación de usuarios mediante correo electrónico y contraseña. Gestiona el registro, login, logout y recuperación de contraseña de clientes y aliados.
+  </Card>
+  <Card title="Firestore" icon="database">
+    Base de datos NoSQL en tiempo real. Almacena perfiles de usuarios, aliados, planes de suscripción y configuración del sistema (precios, tasas de cambio).
+  </Card>
+  <Card title="Storage" icon="cloud">
+    Almacenamiento de archivos en la nube. Utilizado para documentos subidos por los usuarios (PDFs, imágenes) y grabaciones de voz generadas durante las asesorías.
+  </Card>
+</CardGroup>
+
+## Inicialización
+
+El siguiente código es el contenido completo de `src/firebase/firebaseService.js`. Las variables de entorno tienen prioridad sobre los valores por defecto; si no se definen, la app usa las credenciales del proyecto de desarrollo `tpgapp-b5f15`:
+
+```javascript src/firebase/firebaseService.js
+import firebase from "firebase"
+import "firebase/auth"
+import "firebase/firestore"
+import "firebase/storage"
+
+// Valores por defecto del proyecto (config pública de cliente Firebase).
+// Opcional: sobreescribe con REACT_APP_FIREBASE_* en .env para otros entornos.
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyA_pdzlVCMpDuppHRRNntSPrx7afWIdan8",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "tpgapp-b5f15.firebaseapp.com",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "tpgapp-b5f15",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "tpgapp-b5f15.appspot.com",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "491994965627",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:491994965627:web:d81455d1efa41bbab164de",
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-VY6B5MW1WQ"
+}
+
+const app = firebase.initializeApp(firebaseConfig)
+
+const database = app.firestore()
+const authentication = app.auth()
+const storage = app.storage()
+
+export { database, authentication, storage }
+```
+
+## Estructura de colecciones Firestore
+
+### Colección `Usuarios`
+
+Un documento por cada cliente registrado en la plataforma. El `uid` del documento coincide con el UID generado por Firebase Authentication:
+
+```json
+{
+  "email": "user@example.com",
+  "nombre_completo": "Juan Pérez",
+  "doc_identidad": "V-12345678",
+  "tipo_usuario": "client",
+  "num_tel": 0,
+  "fecha_registro": "1 de enero de 2025",
+  "plan": {
+    "nombre": "Plan Básico",
+    "estatus": "Activo"
+  },
+  "foto_usuario": "https://storage.googleapis.com/..."
+}
+```
+
+### Colección `Configuracion` — documento `datos_generales`
+
+Documento único que almacena los precios de todos los servicios y las tarifas de membresía. Es consultado en el checkout para calcular el monto a cobrar y es actualizable por el administrador desde el panel:
+
+```json
+{
+  "precio_asesoria": 20,
+  "precio_redacta": 15,
+  "precio_revisa": 15,
+  "precio_membresia_mensual": 30,
+  "precio_membresia_semestral": 150,
+  "precio_membresia_anual": 250,
+  "fecha_actualizacion": "01/01/2025"
+}
+```
+
+<Note>
+  Los precios en `datos_generales` están expresados en USD. La conversión a bolívares (VES) se aplica en el momento del checkout utilizando la tasa de cambio también almacenada en este documento y configurable por el administrador.
+</Note>
+
+## Firebase Authentication
+
+La plataforma usa exclusivamente el proveedor **Email/Password** de Firebase Authentication. Para que el registro y el login funcionen, este proveedor debe estar habilitado en la consola de Firebase:
+
+1. Accede a [Firebase Console](https://console.firebase.google.com) y selecciona tu proyecto.
+2. Ve a **Authentication** → **Sign-in method**.
+3. Habilita el proveedor **Correo electrónico/Contraseña**.
+4. Guarda los cambios.
+
+<Warning>
+  El archivo `src/firebase/firebaseService.js` contiene las credenciales del proyecto de desarrollo `tpgapp-b5f15` como valores de fallback. Para despliegues en producción, **siempre define las variables de entorno** `REACT_APP_FIREBASE_*` con las credenciales de tu proyecto de producción. No hacerlo puede resultar en que los datos de usuarios de producción se escriban en el proyecto de desarrollo.
+</Warning>

@@ -1,0 +1,121 @@
+{
+  "projectType": "saas",
+  "projectName": "TGP Consultores",
+  "projectDescription": "Una plataforma SaaS de servicios legales en línea que permite a los usuarios redactar documentos jurídicos, someter documentos a revisión profesional y agendar asesorías legales por área (familiar, laboral, mercantil), con gestión de planes de suscripción y pasarela de pagos integrada.",
+  "theme": "almond",
+  "primaryColor": "#1A3A5C",
+  "lightColor": "#E8EEF4",
+  "darkColor": "#0D1F33",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Manual de Usuario",
+        "groups": [
+          {
+            "group": "Introducción",
+            "pages": [
+              "introduccion/bienvenida",
+              "introduccion/registro-e-inicio-de-sesion",
+              "introduccion/perfil-y-cuenta"
+            ]
+          },
+          {
+            "group": "Planes y Pagos",
+            "pages": [
+              "planes/planes-de-suscripcion",
+              "planes/contratar-plan",
+              "planes/metodos-de-pago"
+            ]
+          },
+          {
+            "group": "Servicios",
+            "pages": [
+              "servicios/redacta",
+              "servicios/revisa",
+              "servicios/asesoria"
+            ]
+          },
+          {
+            "group": "Mis Documentos",
+            "pages": [
+              "mis-documentos/listado-de-documentos",
+              "mis-documentos/detalle-redacta",
+              "mis-documentos/detalle-revisa"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Guía de Administrador",
+        "groups": [
+          {
+            "group": "Panel de Administración",
+            "pages": [
+              "admin/dashboard-admin",
+              "admin/gestion-de-usuarios",
+              "admin/gestion-de-asociados",
+              "admin/gestion-de-planes"
+            ]
+          },
+          {
+            "group": "Gestión de Servicios",
+            "pages": [
+              "admin/servicios/listado-de-servicios",
+              "admin/servicios/detalle-redacta",
+              "admin/servicios/detalle-revisa"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Configuración Técnica",
+        "groups": [
+          {
+            "group": "Instalación y Entorno",
+            "pages": [
+              "tecnico/requisitos-previos",
+              "tecnico/instalacion",
+              "tecnico/variables-de-entorno"
+            ]
+          },
+          {
+            "group": "Arquitectura",
+            "pages": [
+              "tecnico/arquitectura-general",
+              "tecnico/firebase",
+              "tecnico/pasarela-de-pagos"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Redacción automatizada de documentos legales (contratos de compraventa, arrendamientos, poderes, actas mercantiles)",
+    "Revisión profesional de documentos con carga de archivos y notas de voz",
+    "Asesorías legales agendadas por calendario en modalidad telefónica, videollamada y presencial",
+    "Gestión de planes de suscripción con cupos de servicios (asesorías, revisiones, redacciones)",
+    "Pasarela de pagos multimodal: C2P, TDC, transferencias bancarias venezolanas",
+    "Panel de administración para gestión de usuarios, asociados, servicios y precios",
+    "Autenticación y base de datos en tiempo real con Firebase (Firestore, Auth, Storage)",
+    "Tipos de usuario diferenciados: cliente, administrador y aliado"
+  ],
+  "publicApiSurface": [
+    "POST /auth/login — Inicio de sesión con email y contraseña via Firebase Authentication",
+    "POST /auth/register — Registro de nuevo usuario (crea documento en colección 'Usuarios' de Firestore)",
+    "GET /Usuarios/:uid — Obtiene datos del perfil de usuario desde Firestore",
+    "GET /Configuracion/datos_generales — Precios y configuración general del sistema",
+    "GET /Planes — Lista todos los planes de suscripción disponibles",
+    "POST /planes-user — Contratación de plan, redirige al flujo de pago",
+    "/apps/redacta — Módulo de redacción de documentos legales",
+    "/apps/revisa — Módulo de revisión de documentos (carga de archivos)",
+    "/apps/asesoria — Módulo de agendamiento de asesorías legales",
+    "/apps/misdocumentos — Historial de documentos del usuario (Redacta, Revisa, Asesoría)",
+    "/apps/pagos — Pasarela de pagos con métodos C2P, TDC, VCBU y DI",
+    "/apps/dashboard — Dashboard del administrador con gestión de servicios activos",
+    "/apps/dashboard_user — Dashboard del cliente con acceso a todos los servicios",
+    "/apps/usuarios — Listado y gestión de usuarios registrados (solo admin)",
+    "/apps/asociados — Listado y gestión de aliados/socios (solo admin)",
+    "/apps/listadoplanes — Administración de planes de suscripción (solo admin)"
+  ]
+}

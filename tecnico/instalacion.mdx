@@ -1,0 +1,102 @@
+---
+title: "Instalación y Configuración Local de TGP Consultores"
+sidebarTitle: "Instalación"
+description: "Clona el repositorio, instala dependencias y levanta el servidor de desarrollo de TGP Consultores en tu entorno local en pocos pasos."
+---
+
+Esta guía te lleva paso a paso desde la clonación del repositorio hasta tener el servidor de desarrollo corriendo localmente. Asegúrate de haber revisado los [requisitos previos](/tecnico/requisitos-previos) antes de continuar.
+
+## Clonar el repositorio
+
+Clona el repositorio oficial y accede al directorio del proyecto:
+
+```bash
+git clone https://github.com/Gaboxtg/Manual_Usuario.git
+cd Manual_Usuario
+```
+
+## Instalar dependencias
+
+Instala todas las dependencias del proyecto definidas en `package.json`:
+
+<CodeGroup>
+
+```bash npm
+npm install
+```
+
+```bash yarn
+yarn install
+```
+
+</CodeGroup>
+
+<Info>
+  El proceso de instalación puede tardar varios minutos la primera vez debido al tamaño del árbol de dependencias. Se instalarán más de 100 paquetes, incluyendo React 17, Firebase 8, MUI 5 y otras librerías del ecosistema.
+</Info>
+
+## Configurar variables de entorno
+
+Copia el archivo de ejemplo y completa las variables con tus credenciales reales:
+
+```bash
+cp .env.example .env
+```
+
+Abre el archivo `.env` recién creado y rellena los valores correspondientes a tu proyecto Firebase y la URL de tu API backend. Consulta la [referencia completa de variables de entorno](/tecnico/variables-de-entorno) para ver el detalle de cada campo.
+
+<Note>
+  El archivo `.env.example` ya incluye `SKIP_PREFLIGHT_CHECK=true`. Esta configuración es necesaria para evitar conflictos de versión entre las dependencias de CRA y las librerías instaladas. No la elimines.
+</Note>
+
+## Iniciar el servidor de desarrollo
+
+El servidor de desarrollo se inicia en el puerto **3003** (definido en el script `start` como `set PORT=3003 && craco start`):
+
+<CodeGroup>
+
+```bash npm
+npm start
+```
+
+```bash yarn
+yarn start
+```
+
+</CodeGroup>
+
+Una vez iniciado, accede a la aplicación en tu navegador en `http://localhost:3003`.
+
+## Compilar para producción
+
+Para generar los archivos estáticos optimizados listos para despliegue:
+
+<CodeGroup>
+
+```bash npm
+npm run build
+```
+
+```bash yarn
+yarn build
+```
+
+</CodeGroup>
+
+Los archivos compilados se generarán en la carpeta `build/` en la raíz del proyecto.
+
+<Note>
+  El proyecto utiliza **CRACO** (Create React App Configuration Override) para extender la configuración de webpack sin hacer `eject`. Las extensiones incluyen soporte para SCSS con rutas de inclusión personalizadas (`node_modules`, `src/assets`), el plugin PostCSS RTL y aliases de módulos como `@src`, `@components`, `@store`, etc. Los comandos `craco start` y `craco build` ya están configurados en los scripts de `package.json`, por lo que `npm start` y `npm run build` los invocan automáticamente.
+</Note>
+
+## Scripts disponibles
+
+Todos los scripts disponibles en el proyecto, tal como están definidos en `package.json`:
+
+| Script | Comando | Descripción |
+|--------|---------|-------------|
+| `start` | `set PORT=3003 && craco start` | Inicia el servidor de desarrollo en el puerto 3003 |
+| `build` | `craco build` | Compila la aplicación para producción |
+| `test` | `craco test` | Ejecuta la suite de pruebas |
+| `lint` | `eslint src/**/*.js src/**/*.jsx` | Analiza el código fuente en busca de errores |
+| `lint:fix` | `eslint src/**/*.js --fix` | Corrige automáticamente los errores de linting |

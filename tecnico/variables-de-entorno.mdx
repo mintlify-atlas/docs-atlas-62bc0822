@@ -1,0 +1,53 @@
+---
+title: "Variables de Entorno de TGP Consultores"
+sidebarTitle: "Variables de Entorno"
+description: "Referencia completa de todas las variables de entorno de TGP Consultores. Configura Firebase, la URL de la API y el puerto del servidor de desarrollo."
+---
+
+La configuración de TGP Consultores se gestiona mediante variables de entorno siguiendo las convenciones de Create React App. Todas las variables expuestas al código del navegador deben llevar el prefijo `REACT_APP_`. Las variables sin ese prefijo (`PORT`, `SKIP_PREFLIGHT_CHECK`) son consumidas por el proceso de Node.js en tiempo de compilación o arranque del servidor.
+
+## Todas las variables disponibles
+
+| Variable | Valor por Defecto | Descripción |
+|----------|-------------------|-------------|
+| `SKIP_PREFLIGHT_CHECK` | `true` | Evita errores de conflicto de versión entre dependencias del proyecto y la instalación de CRA. Necesario dado el árbol de dependencias del proyecto. |
+| `REACT_APP_BASENAME` | `""` | Ruta base de la aplicación. Útil si la app se sirve bajo un subdirectorio (p.ej. `/app`). Déjalo vacío para la raíz del dominio. |
+| `PORT` | `3003` | Puerto en el que escucha el servidor de desarrollo. Ya está configurado directamente en el script `start` del `package.json`. |
+| `REACT_APP_API_URL` | `http://localhost:4000` | URL base del servidor REST API backend. Toda la comunicación con la API usa esta variable a través de `src/config/api.js`. |
+| `REACT_APP_FIREBASE_API_KEY` | *(ver `firebaseService.js`)* | API key del proyecto Firebase. Identifica tu aplicación ante los servicios de Firebase. |
+| `REACT_APP_FIREBASE_AUTH_DOMAIN` | `tpgapp-b5f15.firebaseapp.com` | Dominio de autenticación de Firebase. Usado por el SDK para redireccionamientos OAuth. |
+| `REACT_APP_FIREBASE_PROJECT_ID` | `tpgapp-b5f15` | Identificador único del proyecto Firebase. Usado para construir las URLs de Firestore. |
+| `REACT_APP_FIREBASE_STORAGE_BUCKET` | `tpgapp-b5f15.appspot.com` | Bucket de Cloud Storage para subida y descarga de archivos y grabaciones. |
+| `REACT_APP_FIREBASE_MESSAGING_SENDER_ID` | `491994965627` | ID del remitente para Firebase Cloud Messaging. |
+| `REACT_APP_FIREBASE_APP_ID` | *(ver `firebaseService.js`)* | ID único de la app dentro del proyecto Firebase. |
+| `REACT_APP_FIREBASE_MEASUREMENT_ID` | `G-VY6B5MW1WQ` | ID de medición de Google Analytics 4, vinculado al proyecto Firebase. |
+
+## Ejemplo de archivo .env
+
+El siguiente contenido corresponde al archivo `.env.example` incluido en el repositorio. Cópialo como `.env` y rellena los valores vacíos con las credenciales de tu proyecto:
+
+```bash .env
+SKIP_PREFLIGHT_CHECK=true
+REACT_APP_BASENAME=""
+PORT=3003
+
+# API
+REACT_APP_API_URL=http://localhost:4000
+
+# Firebase (cliente, opcional: si no defines nada, el código usa los valores por defecto del proyecto)
+REACT_APP_FIREBASE_API_KEY=
+REACT_APP_FIREBASE_AUTH_DOMAIN=
+REACT_APP_FIREBASE_PROJECT_ID=
+REACT_APP_FIREBASE_STORAGE_BUCKET=
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=
+REACT_APP_FIREBASE_APP_ID=
+REACT_APP_FIREBASE_MEASUREMENT_ID=
+```
+
+<Warning>
+  **Nunca confirmes tu archivo `.env` en el control de versiones.** Asegúrate de que `.env` está incluido en tu `.gitignore`. El archivo `.env.example` es seguro para confirmar ya que no contiene credenciales reales; únicamente define la estructura de variables esperada.
+</Warning>
+
+<Note>
+  Si las variables de entorno de Firebase se dejan vacías (o no se define el archivo `.env`), la aplicación recurrirá automáticamente a los valores hardcodeados en `src/firebase/firebaseService.js`, que corresponden al proyecto de desarrollo `tpgapp-b5f15`. Este comportamiento es intencional para facilitar el desarrollo local, pero **en despliegues de producción siempre debes definir explícitamente todas las variables** `REACT_APP_FIREBASE_*` con las credenciales del proyecto de producción.
+</Note>

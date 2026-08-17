@@ -1,0 +1,56 @@
+---
+title: "Detalle de Revisión: Atender una Solicitud de Revisa como Admin"
+sidebarTitle: "Detalle Revisa"
+description: "Atiende una solicitud de revisión de documento en TGP Consultores. Descarga el archivo del cliente, agrega comentarios y marca el caso como completado."
+---
+
+La vista de detalle de Revisa del administrador (`/apps/revisa/detallerevisa/:id`) es donde se procesan las solicitudes de revisión de documentos enviadas por los clientes. El administrador accede al archivo original, revisa el contenido y la nota de voz adjunta (si existe), y adjunta su respuesta profesional antes de marcar el caso como completado.
+
+## Proceso de atención
+
+<Steps>
+  <Step title="Abrir el caso desde el listado">
+    Navega a `/apps/servicios/listado`, selecciona la pestaña **Revisa** y haz clic en el caso pendiente que deseas atender.
+  </Step>
+  <Step title="Revisar el documento del cliente">
+    El componente `PreviewCard` carga automáticamente el archivo enviado por el cliente junto con los metadatos del caso: nombre del cliente (`user_nombre_completo`), correo (`user_email`), tipo de revisión (`tipo_doc`), fecha de creación (`fecha_creacion`) y estado actual (`estatus`).
+  </Step>
+  <Step title="Revisar la nota de voz y los comentarios del cliente">
+    Si el cliente adjuntó una nota de voz al momento de enviar la solicitud, los controles de reproducción aparecen en la vista de detalle para facilitar la comprensión de las instrucciones o aclaraciones del cliente.
+  </Step>
+  <Step title="Preparar la respuesta profesional">
+    Haz clic en **"Responder"** en el componente `PreviewActions` para abrir el modal **"Formulario de respuesta"**. En él puedes:
+    - Subir uno o varios archivos revisados o anotados.
+    - Agregar observaciones escritas en el campo `observaciones_respuesta`.
+  </Step>
+  <Step title="Enviar la respuesta y completar el caso">
+    Haz clic en **"Responder"** dentro del modal para confirmar. El sistema sube los archivos a Firebase Storage bajo la ruta `Revisa/{uid}/Documentos/{nombre_archivo}` y actualiza el documento en la colección `Revisa` con el estado `"Completo"`.
+  </Step>
+  <Step title="Verificar la visibilidad para el cliente">
+    Una vez completado, el cliente verá el resultado de la revisión en la sección **Mis Documentos → Detalle Revisa** de su panel de usuario.
+  </Step>
+</Steps>
+
+## Componentes de la vista
+
+**PreviewCard**
+
+Ocupa la columna principal (9/12 de ancho) y muestra:
+- El archivo o documento que el cliente envió para revisión, cargado desde `documentos` en Firestore.
+- La nota de voz del cliente, cargada desde el campo `voice` del documento en Firestore.
+- Los metadatos del caso para contextualizar la solicitud.
+
+**PreviewActions**
+
+Ocupa la columna lateral (3/12 de ancho) junto a las tarjetas de detalles del servicio y del usuario. Proporciona:
+- Botón para abrir el modal de respuesta (`setFormModal`).
+- Botón para visualizar la respuesta ya enviada (`setRespuestaModal`), disponible una vez que el caso está completado.
+- Control del estado del caso (`estatus`).
+
+## Nota de voz del cliente
+
+Si el cliente adjuntó una nota de voz al momento de crear la solicitud de revisión, el campo `voice` del documento en Firestore contendrá la URL del archivo de audio almacenado en Firebase Storage. En ese caso, los controles de reproducción de audio aparecen en `PreviewCard`, permitiendo al administrador escuchar las indicaciones del cliente antes de redactar su respuesta.
+
+<Info>
+  Todos los cambios realizados sobre el caso —actualizaciones de estado, archivos adjuntos y observaciones— se guardan en tiempo real en la colección `Revisa` de Firestore y son visibles de inmediato para el cliente en su panel de usuario. No es necesario realizar ninguna acción adicional para notificar al cliente; el campo `notificacion_cliente: true` se establece automáticamente al guardar la respuesta.
+</Info>

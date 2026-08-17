@@ -1,0 +1,73 @@
+---
+title: "Cómo Contratar un Plan en TGP Consultores"
+sidebarTitle: "Contratar Plan"
+description: "Selecciona y contrata un plan de suscripción en TGP Consultores. El proceso se completa en dos pasos: elegir plan y confirmar el pago."
+---
+
+Contratar un plan en TGP Consultores es un proceso sencillo que se completa en dos etapas: primero seleccionas el plan que mejor se adapta a tus necesidades y luego completas el pago a través de la pasarela de pagos integrada. Una vez aprobado el pago, los cupos de los servicios se activan de forma inmediata en tu cuenta.
+
+## Pasos para contratar un plan
+
+<Steps>
+  <Step title="Accede a la sección de Planes">
+    Desde tu panel de usuario (ruta `/apps/dashboard_user`), haz clic en el botón **"Planes"** del menú lateral. También puedes navegar directamente a la sección de planes (`/apps/planes-user`).
+  </Step>
+  <Step title="Explora los planes disponibles">
+    Visualizarás una cuadrícula con todas las opciones de planes disponibles. Cada tarjeta muestra la información esencial del plan:
+
+    - **`nombre_plan`** — Nombre comercial del plan.
+    - **`precio`** — Costo en USD.
+    - **Duración** — Período de vigencia del plan (cantidad y unidad de tiempo).
+    - **`cant_asesoria`** — Número de asesorías incluidas.
+    - **`cant_revisa`** — Número de revisiones de documentos incluidas.
+    - **`cant_redacta`** — Número de redacciones de documentos incluidas.
+    - **Fecha de vencimiento estimada** — Calculada a partir del día de contratación.
+  </Step>
+  <Step title="Selecciona tu plan">
+    Haz clic en el botón **"Adquirir plan"** de la tarjeta que desees contratar. El sistema registrará la información del plan seleccionado y te redirigirá al siguiente paso.
+  </Step>
+  <Step title="Accede a la pasarela de pagos">
+    Serás redirigido automáticamente a la pasarela de pagos (`/apps/pagos`), donde podrás completar el proceso. En este punto, el plan queda registrado en el sistema con el estatus `"Pendiente"`.
+  </Step>
+  <Step title="Selecciona tu método de pago y completa los campos">
+    Elige el método de pago de tu preferencia entre las opciones disponibles: **C2P**, **TDC**, **VCBU** o **DI**. Consulta la página [Métodos de Pago](/planes/metodos-de-pago) para conocer los campos requeridos por cada modalidad.
+  </Step>
+  <Step title="Avanza al paso de confirmación">
+    Una vez completados todos los campos requeridos, haz clic en **Siguiente** para pasar al resumen de confirmación. Revisa que todos los datos ingresados sean correctos antes de continuar.
+  </Step>
+  <Step title="Confirma el pago">
+    Haz clic en **Confirmar Pago**. El sistema procesará la transacción con la entidad bancaria correspondiente. Una vez aprobado el pago, el plan se activa y su estatus cambia a **`"Activo"`** o **`"Aprobado"`**, poniendo a disposición todos los cupos de servicios incluidos.
+  </Step>
+</Steps>
+
+## Datos registrados al contratar un plan
+
+Cuando seleccionas un plan y avanzas hacia el pago, el sistema construye y almacena el siguiente objeto con la información completa del plan:
+
+```json
+{
+  "id": "plan-id",
+  "nombre_plan": "Plan Básico",
+  "precio": 25,
+  "total_asesoria": 2,
+  "total_revisa": 2,
+  "total_redacta": 2,
+  "cant_asesoria": 0,
+  "cant_revisa": 0,
+  "cant_redacta": 0,
+  "fecha_subscripcion": "01/01/2025",
+  "fecha_vencimiento": "01/02/2025",
+  "estatus": "Pendiente",
+  "notificacion_expiracion": false
+}
+```
+
+<Note>
+  Los campos **`cant_*`** comienzan en `0` en el momento de la contratación y se incrementan en una unidad cada vez que se consume el servicio correspondiente. Los campos **`total_*`** representan el cupo máximo incluido en el plan y no varían durante la vigencia del mismo.
+
+  La `fecha_vencimiento` es calculada automáticamente sumando la duración del plan (`duracion.cantidad` + `duracion.tipo`) a la fecha actual en el momento de la suscripción.
+</Note>
+
+<Warning>
+  Si tu cuenta tiene una **asesoría cubierta** por el plan gratuito de bienvenida (campo `asesoria_gratis_usada: false` con `cant_asesoria > 0`), el sistema detectará automáticamente que no es necesario realizar un cobro y te redirigirá directamente a la sección de asesoría sin pasar por la pasarela de pagos. Este comportamiento aplica **únicamente** para la asesoría gratuita; los servicios de Revisa y Redacta siempre requieren un plan de pago activo.
+</Warning>

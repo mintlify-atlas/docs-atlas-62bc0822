@@ -1,0 +1,73 @@
+---
+title: "Gestión de Asociados y Aliados en TGP Consultores"
+sidebarTitle: "Asociados"
+description: "Administra los socios y aliados de TGP Consultores desde el panel de administración. Agrega, edita y elimina registros de aliados con sus datos y asignaciones."
+---
+
+La sección de gestión de asociados (`/apps/asociados`) administra el directorio de aliados y socios profesionales vinculados a TGP Consultores. Desde aquí el administrador puede consultar todos los registros activos, añadir nuevos aliados, expandir sus datos y eliminar entradas cuando sea necesario.
+
+## ¿Qué es un aliado?
+
+Un aliado es un profesional o firma asociada (generalmente un despacho jurídico o abogado independiente) registrado en la colección `Aliados` de Firestore. A diferencia de los clientes regulares, los aliados:
+
+- Inician sesión con `tipo_usuario: 'aliado'`.
+- Tienen una estructura de datos propia, separada de la colección de clientes.
+- Pueden recibir planes de suscripción especiales marcados con `plan_Aliado: true`.
+- Están listados y gestionados exclusivamente desde esta sección del panel de administración.
+
+## Tabla de asociados
+
+La vista principal en `/apps/asociados` muestra una tabla expandible (`TableExpandable`) construida con `react-data-table-component`. Las columnas principales son:
+
+| Columna | Descripción |
+|---|---|
+| `nombre` | Nombre completo o razón social del aliado |
+| `email` | Correo electrónico de contacto |
+| Datos adicionales | Disponibles al expandir la fila |
+
+Al hacer clic en el ícono de expansión de cualquier fila se despliega información complementaria del aliado sin necesidad de navegar a otra vista.
+
+## Agregar un nuevo asociado
+
+<Steps>
+  <Step title="Ir a la sección de asociados">
+    Navega a `/apps/asociados` desde el panel de administración.
+  </Step>
+  <Step title="Abrir el modal de creación">
+    Haz clic en el botón **"Agregar Asociado"** para abrir el modal `AddNewModal`, o en **"Agregar Aliado"** para abrir el modal `AddNewModalAliado` según el tipo de registro que vayas a crear.
+  </Step>
+  <Step title="Completar los campos requeridos">
+    Ingresa la información del aliado en el formulario del modal: nombre, email y demás campos obligatorios.
+  </Step>
+  <Step title="Confirmar el registro">
+    Haz clic en el botón de confirmación. El registro se guarda en la colección `Aliados` de Firestore y aparece de inmediato en la tabla.
+  </Step>
+</Steps>
+
+## Eliminar un asociado
+
+Para retirar un aliado del sistema utiliza el ícono de eliminar en la fila correspondiente. Se mostrará el modal de confirmación (`deleteModal` o `deleteModalAliado` según el tipo de registro).
+
+<Warning>
+  La eliminación de un asociado es una acción **irreversible**. Una vez confirmada, el registro desaparece de la colección `Aliados` en Firestore y no puede recuperarse. Verifica cuidadosamente que estás eliminando el registro correcto antes de confirmar.
+</Warning>
+
+## Asignar plan de aliado
+
+Algunos planes de suscripción están marcados con `plan_Aliado: true`, lo que los hace exclusivos para cuentas de tipo aliado. Para asignar uno de estos planes a un socio:
+
+<Steps>
+  <Step title="Navegar a la gestión de planes">
+    Ve a `/apps/listadoplanes` desde el panel de administración o desde el botón **"Planes"** en el perfil del administrador.
+  </Step>
+  <Step title="Identificar el plan de aliado">
+    En la tabla de planes, localiza los registros donde `plan_Aliado: true`.
+  </Step>
+  <Step title="Usar la acción de asignación">
+    Haz clic en el ícono de asignación (UserPlus) de ese plan para abrir `ModalAsignarAliado`, selecciona el aliado de la lista desplegable y confirma la operación.
+  </Step>
+</Steps>
+
+<Tip>
+  Para más detalles sobre la creación y configuración de planes de aliado, consulta la sección [Gestión de Planes](/admin/gestion-de-planes).
+</Tip>

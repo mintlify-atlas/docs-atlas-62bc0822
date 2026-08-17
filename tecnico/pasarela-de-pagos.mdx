@@ -1,0 +1,156 @@
+---
+title: "Integración de la Pasarela de Pagos en TGP Consultores"
+sidebarTitle: "Pasarela de Pagos"
+description: "Arquitectura técnica de la pasarela de pagos de TGP Consultores: métodos C2P, TDC, VCBU y DI. Flujo del checkout y configuración del backend API."
+---
+
+TGP Consultores implementa una pasarela de pagos personalizada orientada al sistema bancario venezolano, que soporta cuatro modalidades de pago distintas. El flujo de cobro está encapsulado en el componente `CheckoutForms` (`src/views/apps/checkout-forms/checkout-formC2P.js`), accesible en la ruta `/apps/pagos`, y opera como un wizard de dos pasos: captura de datos y confirmación. El frontend solo recolecta los datos del formulario; toda la comunicación con los bancos ocurre en el servidor backend.
+
+## Métodos de pago soportados
+
+| Método | Modalidad | Descripción |
+|--------|-----------|-------------|
+| **C2P** | Cobro por Celular | Pago mediante número de teléfono registrado en el banco y token de autorización bancario. |
+| **TDC** | Tarjeta de Crédito/Débito | Pago con tarjeta usando número de cuenta TDC, CVV y fecha de expiración. |
+| **VCBU (BVC)** | Transferencia Bancaria | Transferencia directa entre cuentas bancarias venezolanas. Requiere código de banco beneficiario y tipo de dato de cuenta. |
+| **DI** | Débito Inmediato | Débito inmediato con ID de pago (`di_id_pago`) y token de autorización. |
+
+## Flujo del checkout
+
+<Steps>
+  <Step title="Selección de plan o servicio">
+    El usuario selecciona un plan de suscripción o un servicio puntual (asesoría, redacción o revisión de documentos) que requiere pago.
+  </Step>
+  <Step title="Almacenamiento en Redux">
+    Se despachan las acciones de Redux `SetDataForm` (datos del formulario de pago, incluyendo `tipo_servicio` y monto) y `SetInfoPlan` (información del plan seleccionado), preparando el estado global para el checkout.
+  </Step>
+  <Step title="Redirección a la pasarela">
+    El usuario es redirigido a `/apps/pagos`, donde se renderiza el componente `CheckoutForms` (wizard de dos pasos).
+  </Step>
+  <Step title="Captura de datos — Paso 1: FormC2P">
+    El primer paso del wizard (`FormC2P`) presenta al usuario las opciones de método de pago. Según el método seleccionado, se muestran los campos correspondientes: datos del titular, cédula/RIF, banco, monto y credenciales específicas del método (token, CVV, número de cuenta, etc.).
+  </Step>
+  <Step title="Confirmación — Paso 2: CheckC2P">
+    El segundo paso (`CheckC2P`) muestra un resumen de los datos introducidos para que el usuario los confirme antes de procesar el pago. Al confirmar, los datos se envían al servidor backend en `REACT_APP_API_URL`.
+  </Step>
+  <Step title="Procesamiento y activación del plan">
+    El backend procesa la transacción con el banco correspondiente y devuelve el resultado. En caso de éxito, se llama a `activarPlanTrasPago()`, que actualiza el documento del usuario en Firestore estableciendo `estatus: 'Activo'` en su campo `plan`.
+  </Step>
+</Steps>
+
+## Campos del formulario por método de pago
+
+Los valores del estado del componente `CheckoutForms` reflejan los campos recolectados para cada modalidad:
+
+<Tabs>
+  <Tab title="C2P">
+    | Campo | Descripción |
+    |-------|-------------|
+    | `titular_C2P` | Nombre del titular de la cuenta |
+    | `cedula_C2P` | Cédula de identidad |
+    | `nacionalidad_C2P` | Nacionalidad (V/E) |
+    | `telefono_C2P` | Número de teléfono bancario |
+    | `banco_C2P` | Código del banco emisor |
+    | `token_C2P` | Token de autorización |
+    | `monto_C2P` | Monto a cobrar |
+    | `email_C2P` | Correo del titular |
+    | `motivo_C2P` | Concepto del pago |
+  </Tab>
+  <Tab title="TDC">
+    | Campo | Descripción |
+    |-------|-------------|
+    | `titular_TDC` | Nombre del titular |
+    | `ciRif_TDC` | Cédula o RIF |
+    | `nacionalidad_TDC` | Nacionalidad |
+    | `cuentaTDC_TDC` | Número de tarjeta |
+    | `CVV_TDC` | Código de seguridad CVV |
+    | `fechaExp_TDC` | Fecha de expiración |
+    | `monto_TDC` | Monto a cobrar |
+    | `modalidad_TDC` | Siempre `"TDC"` |
+    | `concepto_TDC` | Concepto del pago |
+  </Tab>
+  <Tab title="VCBU (BVC)">
+    | Campo | Descripción |
+    |-------|-------------|
+    | `titular_VCBU` | Nombre del titular |
+    | `ciRif_VCBU` | Cédula o RIF |
+    | `nacionalidad_VCBU` | Nacionalidad |
+    | `cuentaTDC_VCB` | Número de cuenta origen |
+    | `codBancoBen_VCBU` | Código del banco beneficiario |
+    | `tipoDatoCuentaBen_VCBU` | Tipo de dato de cuenta (`CNTA` por defecto) |
+    | `monto_VCBU` | Monto a transferir |
+    | `modalidad_VCBU` | Siempre `"BVC"` |
+    | `correo_VCBU` | Correo del titular |
+    | `concepto_VCBU` | Concepto de la transferencia |
+  </Tab>
+  <Tab title="DI">
+    | Campo | Descripción |
+    |-------|-------------|
+    | `titular_DI` | Nombre del titular |
+    | `ciRif_DI` | Cédula o RIF |
+    | `nacionalidad_DI` | Nacionalidad |
+    | `cuenta_DI` | Número de cuenta |
+    | `codBancoBen_DI` | Código del banco beneficiario |
+    | `tipoDatoCuentaBen_DI` | Tipo de dato de cuenta (`CNTA` por defecto) |
+    | `di_id_pago` | ID de pago DI |
+    | `trackingId_DI` | ID de seguimiento de la transacción |
+    | `token_DI` | Token de autorización |
+    | `monto_DI` | Monto a debitar |
+    | `concepto_DI` | Concepto del débito |
+  </Tab>
+</Tabs>
+
+## Integración con el backend
+
+El componente `CheckoutForms` utiliza la URL definida en `REACT_APP_API_URL` (por defecto `http://localhost:4000`) para enviar los datos del pago al servidor REST. El backend es el responsable de:
+
+- Comunicarse con las APIs bancarias de cada método de pago.
+- Validar y procesar la transacción.
+- Devolver el resultado (éxito o error) al frontend.
+
+La URL de la API se centraliza en `src/config/api.js`:
+
+```javascript src/config/api.js
+// Elegimos SIEMPRE la URL que venga de REACT_APP_API_URL
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000'
+
+export default API_BASE
+export { API_BASE }
+```
+
+## Lógica de plan gratuito (asesoría sin cobro)
+
+El componente `CheckoutForms` implementa una guarda especial para el servicio de asesoría: si el plan del usuario cubre la asesoría sin costo adicional (`asesoriaSinCobro` de `promoPlanUtils.js` devuelve `true`), el componente muestra una notificación informativa y redirige al usuario directamente a `/apps/asesoria_copy`, omitiendo por completo el flujo de pago.
+
+```javascript
+// Defensa: SOLO bloquea cobro de asesoría cubierta; Revisa/Redacta sí se cobran
+useEffect(() => {
+  if (dataForm?.tipo_servicio !== 'precio_asesoria') return
+
+  let plan = dataUserPlan
+  if (!plan || Object.keys(plan).length === 0) {
+    try {
+      plan = JSON.parse(localStorage.getItem('userData'))?.plan
+    } catch {
+      plan = null
+    }
+  }
+
+  if (!asesoriaSinCobro(plan)) return
+
+  toast.info('Tu asesoría está cubierta sin costo. No es necesario pagar.', {
+    transition: Slide,
+    hideProgressBar: true,
+    autoClose: 2500
+  })
+  history.replace('/apps/asesoria_copy')
+}, [])
+```
+
+<Note>
+  Esta lógica aplica únicamente al servicio `precio_asesoria`. Los servicios `precio_redacta` (redacción de documentos) y `precio_revisa` (revisión de documentos) siempre pasan por el flujo de cobro, independientemente del plan del usuario.
+</Note>
+
+<Warning>
+  El procesamiento de pagos requiere que el servidor backend esté corriendo y configurado con las credenciales bancarias correspondientes a cada método de pago. El frontend únicamente recolecta y valida los datos del formulario; **ninguna credencial bancaria ni clave de procesamiento se almacena en el cliente**. No expongas el backend directamente a internet sin autenticación adecuada.
+</Warning>

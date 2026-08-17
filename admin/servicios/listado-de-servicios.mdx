@@ -1,0 +1,59 @@
+---
+title: "Listado de Servicios Activos en el Panel de Administración"
+sidebarTitle: "Listado de Servicios"
+description: "Revisa y gestiona todos los servicios activos (Redacta, Revisa, Asesoría) enviados por los clientes de TGP Consultores desde el panel de administración."
+---
+
+El listado de servicios (`/apps/servicios/listado`) es el espacio de trabajo central para que los administradores de TGP Consultores revisen y atiendan las solicitudes entrantes de los clientes. Desde aquí se puede consultar el estado de cada caso y acceder al detalle correspondiente para procesarlo.
+
+## Vista general
+
+La sección utiliza una interfaz de pestañas (`Nav tabs`) que organiza los casos según el tipo de servicio solicitado. Las tres pestañas disponibles son **Redacta**, **Revisa** y **Asesoría**, y cada una muestra su propio listado independiente con la información del cliente y el estado del caso.
+
+Los componentes que integran esta vista son:
+
+- **`ListadoRedacta`** — tabla de documentos generados a través del servicio Redacta.
+- **`ListadoRevisa`** — tabla de documentos enviados para revisión profesional.
+- **`ListadoAsesoria`** — tabla de citas de consultoría agendadas.
+
+## Redacta
+
+La pestaña **Redacta** muestra todos los documentos que los clientes generaron a través del flujo de redacción asistida de la plataforma. Cada fila del listado incluye la información del cliente solicitante, el tipo y categoría del documento, la fecha de creación y el estado actual del caso (`estatus`).
+
+Los administradores pueden abrir cada registro para visualizar el documento generado en el panel de detalle y proceder con las acciones de respuesta.
+
+## Revisa
+
+La pestaña **Revisa** muestra los documentos que los clientes cargaron para que un profesional los revise. Cada entrada en la lista incluye los datos del cliente, el tipo de revisión solicitada, la fecha de envío y el estado del caso.
+
+Desde aquí el administrador identifica los casos pendientes y accede a la vista de detalle para descargar el archivo del cliente, agregar comentarios y marcar el caso como completado.
+
+## Asesoría
+
+La pestaña **Asesoría** presenta las citas de consultoría agendadas por los clientes. En esta vista se puede consultar la información del cliente, la fecha y hora de la cita, y el estado de la sesión.
+
+## Acceder al detalle
+
+Para revisar y procesar un caso específico:
+
+<Steps>
+  <Step title="Ir al listado de servicios">
+    Navega a `/apps/servicios/listado` desde el panel de administración.
+  </Step>
+  <Step title="Seleccionar la pestaña correspondiente">
+    Haz clic en la pestaña **Redacta**, **Revisa** o **Asesoría** según el tipo de servicio que deseas atender.
+  </Step>
+  <Step title="Hacer clic en el caso">
+    Selecciona la fila del caso que deseas revisar para abrir su vista de detalle.
+  </Step>
+  <Step title="Vista de detalle — Redacta">
+    Para casos de Redacta, el sistema redirige a `/apps/redactar/detalledoc/:id`, donde se puede visualizar el documento generado, revisar los datos del cliente y completar el servicio adjuntando la respuesta.
+  </Step>
+  <Step title="Vista de detalle — Revisa">
+    Para casos de Revisa, el sistema redirige a `/apps/revisa/detallerevisa/:id`, donde se puede descargar el documento del cliente, agregar observaciones y adjuntar archivos de respuesta antes de marcar el caso como completado.
+  </Step>
+</Steps>
+
+<Note>
+  El listado de servicios también tiene una vista alternativa en `/apps/servicios/documentos`, que ofrece una interfaz de tipo chat (`Lista`) para la interacción en tiempo real con los clientes. Ambas vistas acceden a los mismos datos en Firestore; la diferencia es únicamente la forma en que se presenta y gestiona cada caso.
+</Note>

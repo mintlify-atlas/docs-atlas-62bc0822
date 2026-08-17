@@ -1,0 +1,47 @@
+---
+title: "Detalle de Revisión de Documento en TGP Consultores"
+sidebarTitle: "Detalle Revisa"
+description: "Ve el feedback profesional y el documento revisado en TGP Consultores. Accede al detalle de tu solicitud de revisión para ver comentarios y archivos adjuntos."
+---
+
+La página de detalle del servicio Revisa, accesible en `/apps/misdocumentos/detallerevisa/:uid`, presenta el resultado completo de la revisión profesional que solicitaste para tu documento. Aquí encontrarás tanto los materiales que enviaste originalmente como la retroalimentación emitida por el abogado revisor del equipo TGP Consultores.
+
+## ¿Qué encontrarás aquí?
+
+La vista de detalle está organizada en dos columnas principales. La columna izquierda concentra los materiales del solicitante y la columna derecha muestra la respuesta profesional:
+
+- **Documento original que enviaste** — Los archivos que adjuntaste al crear la solicitud de revisión, disponibles para consultar o visualizar nuevamente.
+- **Inquietudes** — El texto que describiste al momento de enviar el documento, con las dudas o puntos específicos que querías que el profesional revisara.
+- **Nota de voz** — Si incluiste una grabación de audio al crear la solicitud (campo `voice`), aparecerá un reproductor de audio integrado para escucharla directamente desde la página.
+- **Comentarios y observaciones del abogado revisor** — Las observaciones escritas por el profesional se muestran en el campo `respuesta` dentro de la sección "Detalles del caso".
+- **Archivos adjuntos del revisor** — Los documentos finales cargados por el abogado como resultado de la revisión (`documentos_repuestas`), con la opción de visualizarlos directamente.
+- **Datos del usuario** — Nombre completo, correo electrónico y fecha de creación del caso, visibles en la tarjeta de encabezado.
+
+## Cómo acceder al detalle de revisión
+
+<Steps>
+  <Step title="Ve a Mis Documentos">
+    Dirígete a `/apps/misdocumentos` desde el menú de navegación principal.
+  </Step>
+  <Step title="Selecciona la pestaña Revisa">
+    Haz clic en la pestaña **Revisa** para ver el listado de todas tus solicitudes de revisión, ordenadas por fecha de creación de la más reciente a la más antigua.
+  </Step>
+  <Step title="Haz clic en el ID del caso">
+    En la columna **ID** de la tabla, haz clic sobre el identificador del caso que deseas consultar. Serás redirigido a `/apps/misdocumentos/detallerevisa/:uid`.
+  </Step>
+  <Step title="Revisa el feedback y los archivos adjuntos">
+    Examina las observaciones del abogado en la sección derecha y los documentos finales adjuntos. Para ver un archivo, haz clic en el ícono de ojo junto al nombre del documento.
+  </Step>
+</Steps>
+
+## Nota de voz
+
+Si al crear tu solicitud de revisión incluiste una grabación de voz explicando tu caso, un reproductor de audio aparecerá en la sección **"Nota de voz"** dentro de los detalles del caso. Haz clic en el control de reproducción para escuchar el mensaje. De igual manera, si el revisor adjuntó una nota de voz como parte de su respuesta, esta también estará disponible en la sección correspondiente.
+
+<Info>
+  Los casos son procesados por el equipo legal de TGP Consultores. Los tiempos de respuesta dependen del plan contratado y del volumen de solicitudes en curso. Para asuntos urgentes que requieran atención inmediata, utiliza el servicio **Asesoría** para agendar una consulta directa con un profesional.
+</Info>
+
+<Warning>
+  Una vez que un caso es marcado como **Completado**, no es posible cargar archivos adicionales ni modificar la solicitud original. Si necesitas someter el documento a una nueva revisión, deberás iniciar una solicitud nueva desde el servicio Revisa.
+</Warning>

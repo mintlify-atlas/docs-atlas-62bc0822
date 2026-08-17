@@ -1,0 +1,115 @@
+---
+title: "Registro e Inicio de Sesión en TGP Consultores"
+sidebarTitle: "Registro y Acceso"
+description: "Aprende a crear tu cuenta, iniciar sesión y recuperar tu contraseña en TGP Consultores paso a paso."
+---
+
+TGP Consultores utiliza **Firebase Authentication** con correo electrónico y contraseña como mecanismo de autenticación. Todos los datos del usuario se almacenan en la colección `Usuarios` de Firestore, donde cada documento se identifica con el `uid` generado por Firebase al crear la cuenta. No se requieren aplicaciones de terceros ni verificación por SMS para acceder a la plataforma.
+
+## Crear una cuenta nueva
+
+El registro está disponible en la ruta `/register`. Solo necesitas unos minutos y los datos básicos de tu cédula de identidad y correo electrónico.
+
+<Steps>
+  <Step title="Ingresa a la página de registro">
+    Abre la aplicación y haz clic en **Crear una cuenta** en la pantalla de inicio de sesión, o navega directamente a `/register`.
+  </Step>
+  <Step title="Completa el formulario">
+    Rellena todos los campos requeridos:
+
+    | Campo | Descripción |
+    |-------|-------------|
+    | **Nombre completo** | Tu nombre y apellido tal como aparecen en tu documento de identidad. Se guarda como `nombre_completo`. |
+    | **Cédula de identidad** | Número de cédula en formato `V-12.345.678`. Se guarda como `doc_identidad`. |
+    | **Email** | Dirección de correo electrónico válida. Se usa como identificador de acceso. |
+    | **Contraseña** | Mínimo una combinación segura de letras y números. |
+    | **Confirmar contraseña** | Debe coincidir exactamente con el campo anterior. |
+  </Step>
+  <Step title="Acepta los Términos y Condiciones">
+    Al hacer clic en **Registrarse**, el sistema valida el formulario y abre un modal con el contrato de suscripción de **TGP Visión Consultores, C.A.** El documento incluye tu nombre completo y cédula de identidad y cubre los términos de servicio, confidencialidad, duración del contrato y resolución de conflictos. Debes leerlo y hacer clic en **Aceptar** para continuar.
+  </Step>
+  <Step title="Se crea tu cuenta">
+    Al aceptar los términos, el sistema ejecuta `auth.createUserWithEmailAndPassword(email, password)` en Firebase Authentication y crea un documento en la colección `Usuarios` de Firestore con la siguiente estructura inicial:
+
+    ```json
+    {
+      "email": "tu@correo.com",
+      "nombre_completo": "Nombre Apellido",
+      "doc_identidad": "V-12.345.678",
+      "fecha_registro": "15 de enero de 2025",
+      "direccion": "",
+      "pais": "",
+      "ciudad": "",
+      "sexo": "",
+      "num_tel": 0,
+      "fecha_nac": "",
+      "tipo_usuario": "client",
+      "foto_usuario": "https://firebasestorage.googleapis.com/...",
+      "uid": "uid_generado_por_firebase",
+      "plan": {}
+    }
+    ```
+  </Step>
+  <Step title="Inicia sesión con tu nueva cuenta">
+    Una vez completado el registro, la aplicación te redirige a `/login`. Ingresa tu correo y contraseña para acceder a tu panel de cliente.
+  </Step>
+</Steps>
+
+<Warning>
+  Las contraseñas deben coincidir. Si los campos **Contraseña** y **Confirmar contraseña** no son idénticos, el sistema mostrará el mensaje: **"Las contraseñas no coinciden"** y no se creará la cuenta hasta que corrijas el error.
+</Warning>
+
+## Iniciar sesión
+
+Si ya tienes una cuenta registrada, accede desde la pantalla principal en la ruta `/login`.
+
+<Steps>
+  <Step title="Ingresa a la página de inicio de sesión">
+    Navega a `/login` o abre la aplicación. Verás el formulario de acceso con el logotipo de TGP Consultores.
+  </Step>
+  <Step title="Escribe tu correo y contraseña">
+    Introduce la dirección de correo electrónico y la contraseña que registraste. Si olvidaste tu contraseña, haz clic en **¿Olvidaste tu contraseña?** para iniciar la recuperación.
+  </Step>
+  <Step title="Haz clic en Iniciar sesión">
+    El sistema llama a `auth.signInWithEmailAndPassword(email, password)` de Firebase Authentication para verificar tus credenciales. Si son incorrectas, aparecerá el mensaje: **"Correo electrónico o Contraseña inválida"**.
+  </Step>
+  <Step title="Redirección según tu rol">
+    Una vez verificadas las credenciales, el sistema consulta tu documento en la colección `Usuarios` (o `Aliados`) y redirige según el campo `tipo_usuario`:
+
+    | Valor de `tipo_usuario` | Ruta de destino |
+    |-------------------------|-----------------|
+    | `client`                | `/apps/dashboard_user` |
+    | `admin`                 | `/apps/dashboard` |
+    | `aliado`                | `/apps/clientes` |
+
+    Al ingresar, aparecerá una notificación de bienvenida con tu nombre completo.
+  </Step>
+</Steps>
+
+## Recuperar contraseña
+
+Si olvidaste tu contraseña, puedes solicitar un correo de recuperación directamente desde la pantalla de inicio de sesión.
+
+<Steps>
+  <Step title="Haz clic en '¿Olvidaste tu contraseña?'">
+    En la pantalla de inicio de sesión `/login`, haz clic en el enlace **¿Olvidaste tu contraseña?** ubicado junto al campo de contraseña. Serás redirigido a `/reset-password`.
+  </Step>
+  <Step title="Escribe tu correo electrónico">
+    Introduce la dirección de correo electrónico asociada a tu cuenta de TGP Consultores.
+  </Step>
+  <Step title="Haz clic en Recuperar contraseña">
+    El sistema ejecuta `auth.sendPasswordResetEmail(email)`. Si el correo existe en Firebase Authentication, recibirás un enlace de restablecimiento en tu bandeja de entrada en pocos minutos.
+  </Step>
+  <Step title="Sigue el enlace en tu correo">
+    Abre el correo enviado por Firebase, haz clic en el enlace de recuperación y establece una nueva contraseña. El enlace tiene una vigencia limitada por seguridad.
+  </Step>
+  <Step title="Inicia sesión con tu nueva contraseña">
+    Una vez restablecida la contraseña, regresa a `/login` e ingresa con tus credenciales actualizadas.
+  </Step>
+</Steps>
+
+## Primera asesoría gratuita
+
+<Tip>
+  Los usuarios nuevos que inician sesión **sin un plan asignado** (`plan: {}`) reciben automáticamente **1 asesoría legal gratuita** al primer ingreso. El sistema detecta la ausencia de plan en el campo `plan` de tu documento en `Usuarios` y activa un plan de cortesía temporal que te permite agendar tu primera consulta jurídica sin costo adicional. Una vez utilizado, deberás contratar un plan para continuar usando los servicios. Visita la sección de [Planes](/planes) para conocer las opciones disponibles.
+</Tip>

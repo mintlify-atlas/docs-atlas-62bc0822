@@ -1,0 +1,59 @@
+---
+title: "Mis Documentos: Historial de Servicios en TGP Consultores"
+sidebarTitle: "Listado"
+description: "Consulta el historial completo de tus documentos redactados, revisiones solicitadas y asesorías agendadas en TGP Consultores desde una sola pantalla."
+---
+
+La sección **Mis Documentos** es tu centro de historial personal en TGP Consultores. Desde aquí puedes consultar todos los servicios legales que has utilizado, sin importar cuándo los solicitaste. Accede directamente desde `/apps/misdocumentos` y tendrás una vista unificada de cada trámite que hayas iniciado en la plataforma.
+
+## ¿Qué aparece en Mis Documentos?
+
+La pantalla principal organiza tus servicios en tres pestañas. Cada una corresponde a un tipo de servicio distinto:
+
+- **Redacta** — Muestra el listado de todos los documentos legales que has generado a través del servicio Redacta. Cada fila incluye el tipo de documento, la categoría, la subcategoría y el estado actual del caso. Al hacer clic en el ID del documento serás redirigido al detalle completo.
+
+- **Revisa** — Muestra todos los documentos que enviaste para revisión profesional. La tabla incluye el tipo de documento, la fecha de creación y el estado del caso. Al hacer clic en el ID accedes al feedback del abogado revisor.
+
+- **Asesoría** — Muestra todas las consultas legales que has agendado o completado. Podrás ver el tipo de asesoría, el resumen del caso, la vía de contacto, el teléfono registrado, el día y la hora de cada cita.
+
+## Cómo navegar
+
+<Steps>
+  <Step title="Accede a Mis Documentos">
+    Desde tu panel principal, haz clic en **Mis Documentos** en el menú de navegación. Serás dirigido a `/apps/misdocumentos`.
+  </Step>
+  <Step title="Elige la pestaña del servicio">
+    En la parte superior de la tarjeta verás tres pestañas: **Redacta**, **Revisa** y **Asesoría**. Selecciona la que corresponde al tipo de servicio que deseas consultar.
+  </Step>
+  <Step title="Revisa las filas del listado">
+    Cada fila de la tabla muestra los datos principales del caso: tipo de documento o asesoría, fecha de creación y estado actual.
+  </Step>
+  <Step title="Abre el detalle">
+    Haz clic sobre el ID o la fila que deseas consultar. Serás redirigido a la pantalla de detalle correspondiente al servicio seleccionado.
+  </Step>
+</Steps>
+
+## Estados de los documentos
+
+Cada caso en el listado puede encontrarse en uno de los siguientes estados:
+
+| Estado | Descripción |
+|---|---|
+| Pendiente | El documento fue enviado y está esperando revisión por parte del equipo legal. |
+| En proceso | Un profesional está trabajando activamente en tu caso. |
+| Completado | El caso fue atendido y el resultado está listo para que lo consultes. |
+
+<Note>
+  El listado se filtra automáticamente por tu identificador de usuario (`user_uid`), por lo que únicamente verás los documentos y asesorías que tú has creado. No tendrás acceso a los expedientes de otros usuarios.
+</Note>
+
+## Explora el detalle de cada servicio
+
+<CardGroup cols={2}>
+  <Card title="Detalle Redacta" icon="file-pen" href="/mis-documentos/detalle-redacta">
+    Consulta, previsualiza y descarga el documento legal generado a través del servicio Redacta.
+  </Card>
+  <Card title="Detalle Revisa" icon="magnifying-glass" href="/mis-documentos/detalle-revisa">
+    Accede al feedback profesional, archivos adjuntos y nota de voz de tu solicitud de revisión.
+  </Card>
+</CardGroup>

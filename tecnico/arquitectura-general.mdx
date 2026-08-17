@@ -1,0 +1,105 @@
+---
+title: "Arquitectura General de TGP Consultores"
+sidebarTitle: "Arquitectura"
+description: "Visión general de la arquitectura de TGP Consultores: frontend React, backend Firebase y API REST. Estructura de directorios, rutas y flujo de autenticación."
+---
+
+TGP Consultores es una aplicación SPA (Single Page Application) construida con React 17 que combina Firebase como backend-as-a-service para autenticación, persistencia en tiempo real y almacenamiento de archivos, con un servidor REST API externo para operaciones que requieren lógica de servidor, como el procesamiento de pagos bancarios. El frontend se comunica directamente con Firebase mediante el SDK de cliente y con la API REST a través de `axios`, usando la URL configurada en `src/config/api.js`.
+
+## Stack tecnológico
+
+| Capa | Tecnología | Versión |
+|------|-----------|--------|
+| Frontend | React | 17.0.1 |
+| Enrutamiento | React Router DOM | 5.2.0 |
+| Gestión de estado | Redux + Redux Thunk | 4.0.5 / 2.3.0 |
+| Componentes UI | Reactstrap + MUI | 8.6.0 / 5.x |
+| Herramienta de build | CRACO (CRA override) | 6.4.0 |
+| Estilos | SCSS + Tailwind CSS | sass 1.32.13 / tailwindcss 3.x |
+| Backend (BaaS) | Firebase (Firestore, Auth, Storage) | 8.10.0 |
+| API REST | Node.js (servidor externo) | puerto 4000 |
+| Control de acceso | CASL | 5.2.2 |
+| Pagos | Pasarela personalizada C2P/TDC/VCBU/DI | — |
+
+## Estructura del proyecto
+
+La carpeta `src/` está organizada de la siguiente manera:
+
+```
+src/
+├── @core/          # Layout principal, componentes base y assets del tema
+├── @fake-db/       # Datos simulados para desarrollo y pruebas locales
+├── assets/         # Imágenes, fuentes y hojas de estilo SCSS globales
+├── auth/           # Helpers de autenticación JWT
+├── config/         # URL base de la API (api.js → REACT_APP_API_URL)
+├── configs/        # Configuración de ACL/permisos con CASL
+├── firebase/       # Inicialización del SDK de Firebase (firebaseService.js)
+├── navigation/     # Definiciones del menú lateral por tipo de usuario
+├── redux/          # Actions, reducers y store de Redux
+├── router/         # Configuración de React Router y rutas por módulo
+├── services/       # Capa de servicios para llamadas a la API REST
+├── utility/        # Hooks, contextos y funciones auxiliares (Utils.js)
+└── views/          # Componentes de página
+    ├── apps/       # Vistas principales: dashboard, pagos, asesoría, admin
+    └── pages/      # Autenticación y configuración de cuenta
+```
+
+Los aliases de webpack configurados en `craco.config.js` permiten importaciones cortas en todo el proyecto:
+
+| Alias | Ruta real |
+|-------|-----------|
+| `@src` | `src/` |
+| `@assets` | `src/@core/assets` |
+| `@components` | `src/@core/components` |
+| `@layouts` | `src/@core/layouts` |
+| `@store` | `src/redux` |
+| `@styles` | `src/@core/scss` |
+| `@configs` | `src/configs` |
+| `@utils` | `src/utility/Utils` |
+| `@hooks` | `src/utility/hooks` |
+
+## Tipos de usuario y rutas
+
+La plataforma distingue tres tipos de usuario, definidos en el campo `tipo_usuario` del documento Firestore. La ruta de inicio tras el login se determina en `src/utility/Utils.js`:
+
+| Tipo de usuario | Ruta por defecto | Descripción |
+|-----------------|-----------------|-------------|
+| `client` | `/home` | Cliente registrado. Accede a su dashboard personal, servicios y planes. |
+| `admin` | `/home` | Administrador de la plataforma. Gestiona usuarios, aliados, servicios y configuración. |
+| `aliado` | `/apps/clientes` | Socio/asociado. Tiene acceso a listado de clientes propios. |
+
+<Note>
+  La ruta raíz del router es `/home` (definida como `DefaultRoute` en `src/router/routes/index.js`). El título del documento se establece como `%s - TGP Consultores` mediante la constante `TemplateTitle`.
+</Note>
+
+## Flujo de autenticación
+
+<Steps>
+  <Step title="Envío del formulario de login">
+    El usuario introduce sus credenciales (correo y contraseña) en la pantalla de inicio de sesión.
+  </Step>
+  <Step title="Validación con Firebase Authentication">
+    Se llama a `firebase.auth().signInWithEmailAndPassword(email, password)` para validar las credenciales contra el proyecto Firebase configurado.
+  </Step>
+  <Step title="Consulta del perfil en Firestore">
+    Una vez autenticado, se consulta la colección `Usuarios` de Firestore buscando el documento cuyo `uid` coincide con el usuario de Firebase. Para socios, se consulta la colección `Aliados`.
+  </Step>
+  <Step title="Persistencia en localStorage y Redux">
+    Los datos del usuario (incluyendo `tipo_usuario`, `plan` y demás campos del perfil) se almacenan en `localStorage` bajo la clave `userData` y se despachan al store de Redux para disponibilidad global.
+  </Step>
+  <Step title="Configuración de reglas CASL">
+    Se construye el objeto `ability` de CASL con las reglas de acceso correspondientes al `tipo_usuario`, controlando qué vistas y acciones están disponibles para cada rol.
+  </Step>
+  <Step title="Redirección al dashboard">
+    El router redirige al usuario a la ruta por defecto correspondiente a su rol (`/home` para `client` y `admin`, `/apps/clientes` para `aliado`).
+  </Step>
+</Steps>
+
+## Colecciones de Firestore
+
+Las principales colecciones utilizadas por la aplicación en Firestore son:
+
+- **`Usuarios`** — Un documento por cada cliente registrado. Almacena el perfil completo: datos personales, tipo de usuario, plan activo y foto de perfil.
+- **`Aliados`** — Un documento por cada socio/asociado registrado en la plataforma. Estructura similar a `Usuarios` pero con permisos diferenciados.
+- **`Configuracion`** — Configuración global del sistema. El documento principal es `datos_generales`, que almacena precios de servicios, precios de membresías y tasas de cambio utilizadas en el checkout.
+- **`Planes`** — Definiciones de los planes de suscripción disponibles: nombre, precio, servicios incluidos y condiciones de cobertura.

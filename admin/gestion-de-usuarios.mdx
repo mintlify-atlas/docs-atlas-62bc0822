@@ -1,0 +1,80 @@
+---
+title: "Gestión de Usuarios en el Panel de TGP Consultores"
+sidebarTitle: "Usuarios"
+description: "Consulta, edita y administra todos los usuarios registrados en TGP Consultores desde el panel de administración. Accede a planes, historial y datos personales."
+---
+
+La sección de gestión de usuarios (`/apps/usuarios`) lista todos los usuarios registrados en la plataforma junto con sus datos de perfil y el plan de suscripción activo. Desde aquí el administrador puede consultar el detalle de cualquier cuenta, editar su información y cambiar su nivel de acceso.
+
+## Listado de usuarios
+
+La vista principal muestra una tabla paginada construida con `react-data-table-component` que incluye las siguientes columnas:
+
+| Columna | Campo en Firestore |
+|---|---|
+| Nombre completo | `nombre_completo` |
+| Correo electrónico | `email` |
+| Documento de identidad | `doc_identidad` |
+| Tipo de usuario | `tipo_usuario` |
+| Plan activo | Plan suscrito actualmente |
+| Fecha de registro | `fecha_registro` |
+
+La tabla soporta búsqueda por texto y filtros de columna para localizar rápidamente cualquier cuenta. La paginación se gestiona con `ReactPaginate`.
+
+## Ver detalle de usuario
+
+Para acceder al perfil completo de un usuario sigue estos pasos:
+
+<Steps>
+  <Step title="Ir al listado de usuarios">
+    Navega a `/apps/usuarios` desde el panel de administración.
+  </Step>
+  <Step title="Localizar al usuario">
+    Usa el campo de búsqueda o los filtros disponibles para encontrar la cuenta deseada.
+  </Step>
+  <Step title="Abrir el detalle">
+    Haz clic sobre la fila del usuario o en el ícono de vista (ojo) para abrir la vista de detalle en `/apps/usuarios/detalle/:uid`.
+  </Step>
+  <Step title="Revisar la información">
+    La vista de detalle muestra los siguientes componentes:
+    - **UserInfoCard** — datos personales: nombre, email, documento de identidad y foto de perfil.
+    - **PlanCard** — plan de suscripción activo con fechas de inicio y vencimiento.
+    - **UserTimeline** — historial cronológico de actividad del usuario en la plataforma.
+    - **PermissionsTable** — roles y permisos asignados a la cuenta.
+  </Step>
+</Steps>
+
+<Note>
+  Si el UID no corresponde a ningún usuario registrado, la vista mostrará una alerta de error con un enlace de retorno al listado.
+</Note>
+
+## Editar usuario
+
+Para modificar los datos de una cuenta existente:
+
+<Steps>
+  <Step title="Acceder a la edición">
+    Desde el listado de usuarios, haz clic en el ícono de edición o navega directamente a `/apps/usuarios/editar/:uid`.
+  </Step>
+  <Step title="Seleccionar la pestaña correspondiente">
+    La pantalla de edición está organizada en tres pestañas:
+    - **Account** — correo electrónico (`email`) y tipo de usuario (`tipo_usuario`).
+    - **Information** — datos personales como nombre completo, documento de identidad y dirección.
+    - **Social** — información adicional de contacto y redes.
+  </Step>
+  <Step title="Realizar los cambios y guardar">
+    Edita los campos necesarios en cada pestaña y confirma los cambios. Los datos se actualizan en Firestore de inmediato.
+  </Step>
+</Steps>
+
+## Crear usuario
+
+<Note>
+  Las nuevas cuentas de usuario son creadas por los propios usuarios a través de la página de registro de la plataforma. Los administradores pueden actualizar cuentas existentes pero **no pueden crear cuentas nuevas directamente desde el panel de administración**.
+</Note>
+
+## Advertencias importantes
+
+<Warning>
+  Modificar el campo `tipo_usuario` de una cuenta (por ejemplo, de `'client'` a `'admin'`) cambia inmediatamente el nivel de acceso y el dashboard al que es redirigido ese usuario en su próximo inicio de sesión. Verifica siempre la identidad y los permisos necesarios antes de hacer este cambio.
+</Warning>

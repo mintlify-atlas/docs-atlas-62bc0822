@@ -1,0 +1,77 @@
+---
+title: "Administración de Planes de Suscripción en TGP Consultores"
+sidebarTitle: "Planes Admin"
+description: "Crea, edita y elimina planes de suscripción en TGP Consultores. Define los cupos de servicios, precio en USD y duración desde el panel de administración."
+---
+
+La sección de administración de planes (`/apps/listadoplanes`) permite a los administradores crear y gestionar todos los planes de suscripción disponibles en la plataforma, tanto para clientes regulares como para aliados. Los cambios realizados aquí tienen efecto inmediato para nuevas suscripciones.
+
+## Tabla de planes
+
+La vista principal muestra un `DataTable` paginado con todos los planes registrados en la plataforma. Las columnas disponibles son:
+
+| Columna | Campo | Descripción |
+|---|---|---|
+| Nombre del plan | `nombre_plan` | Identificador del plan |
+| Precio | `precio` | Costo en USD |
+| Cupo Asesorías | `cant_asesoria` | Número de asesorías incluidas |
+| Cupo Revisas | `cant_revisa` | Número de revisiones incluidas |
+| Cupo Redactas | `cant_redacta` | Número de redacciones incluidas |
+| Duración | `duracion` | Período de vigencia del plan |
+| Plan Aliado | `plan_Aliado` | `true` si el plan es exclusivo para aliados |
+| Usuarios / Aliado | `usuarios_sub` / `aliadoAsignadoNombre` | Cant. de suscriptores o aliado asignado |
+
+## Crear un nuevo plan
+
+<Steps>
+  <Step title="Abrir el modal de creación">
+    Haz clic en el botón **"Añadir plan"** para crear un plan de cliente (abre `ModalEditPlan`), o en **"Añadir plan Aliado"** para crear un plan exclusivo para socios (abre `ModalEditPlanAliado`).
+  </Step>
+  <Step title="Completar los campos del plan">
+    Ingresa la información requerida en el formulario:
+    - **`nombre_plan`** — nombre descriptivo del plan.
+    - **`precio`** — precio en USD.
+    - **`cant_asesoria`** — número de asesorías incluidas.
+    - **`cant_revisa`** — número de revisiones incluidas.
+    - **`cant_redacta`** — número de redacciones incluidas.
+    - **Duración** — cantidad y tipo de período (mensual, semestral, anual).
+  </Step>
+  <Step title="Configurar como plan de aliado (opcional)">
+    Activa el campo `plan_Aliado` si este plan debe estar disponible únicamente para cuentas de tipo aliado.
+  </Step>
+  <Step title="Guardar el plan">
+    Confirma el formulario. El plan se almacena en Firestore y queda disponible de inmediato para asignarlo a usuarios o aliados.
+  </Step>
+</Steps>
+
+## Editar un plan
+
+Haz clic en el ícono de edición (lápiz) en la fila del plan que deseas modificar. El sistema detecta automáticamente si es un plan de cliente o aliado y abre `ModalEditPlan` o `ModalEditPlanAliado` con todos los datos precargados. Realiza los cambios necesarios y guarda.
+
+## Eliminar un plan
+
+Haz clic en el ícono de eliminación (papelera) en la fila correspondiente. Se abrirá `ModalDeletePlan` solicitando confirmación antes de proceder.
+
+<Warning>
+  Eliminar un plan **no afecta** a los usuarios que ya lo adquirieron. Sus suscripciones vigentes permanecen activas hasta su fecha de vencimiento original. Sin embargo, el plan dejará de estar disponible para nuevas contrataciones de manera inmediata.
+</Warning>
+
+## Asignar plan a un aliado
+
+Para los planes marcados con `plan_Aliado: true`, aparece el ícono de asignación (UserPlus) en la columna de acciones. Al hacer clic:
+
+<Steps>
+  <Step title="Abrir ModalAsignarAliado">
+    Haz clic en el ícono de asignación (UserPlus) del plan aliado deseado.
+  </Step>
+  <Step title="Seleccionar el aliado">
+    En el modal `ModalAsignarAliado`, selecciona el aliado de la lista desplegable. Los aliados disponibles se cargan desde la función `getCompaniasAliados`.
+  </Step>
+  <Step title="Confirmar la asignación">
+    Haz clic en **"Asignar"**. Se mostrará un segundo modal de confirmación indicando el plan y el aliado seleccionados. Al confirmar, el sistema ejecuta `POST /api/planes/aliados/asignar` con el `planId` y el `aliadoUid` correspondientes, y actualiza los datos del aliado y sus usuarios en Firestore.
+  </Step>
+</Steps>
+
+<Note>
+  Todos los precios de los planes están expresados en **USD**. El sistema aplica la tasa de cambio configurada en `Configuracion/precios` para convertir el monto al momento del pago en VES (bolívares). Para actualizar la tasa de cambio o los precios de servicios individuales, utiliza el botón **"Configurar Precios"** en el dashboard de administración.
+</Note>

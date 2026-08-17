@@ -1,0 +1,54 @@
+---
+title: "Requisitos Previos para Instalar TGP Consultores"
+sidebarTitle: "Requisitos"
+description: "Verifica los requisitos de sistema necesarios antes de instalar TGP Consultores: Node.js, npm/yarn, acceso a Firebase y configuración de la API backend."
+---
+
+Esta guía está dirigida a desarrolladores y administradores de sistemas que necesiten desplegar, extender o mantener la plataforma TGP Consultores. Antes de proceder con la instalación, asegúrate de que tu entorno cumple con todos los requisitos detallados a continuación.
+
+## Software necesario
+
+Los siguientes programas deben estar instalados en tu máquina de desarrollo o servidor antes de clonar el repositorio:
+
+- **Node.js** — Compatible con `react-scripts` 4.0.2. Se recomienda Node.js **14 LTS** o **16 LTS**. Versiones superiores a 17 pueden presentar conflictos con algunas dependencias de webpack incluidas en CRA 4.
+- **npm** — Incluido automáticamente con Node.js. Se utiliza para instalar dependencias y ejecutar los scripts del proyecto.
+- **yarn 1.21.1** — Versión especificada en las dependencias de `package.json`. Puedes usar yarn como alternativa a npm para instalar dependencias y ejecutar scripts.
+- **Git** — Necesario para clonar el repositorio y gestionar el control de versiones.
+
+<Tip>
+  Puedes verificar tus versiones instaladas ejecutando `node -v`, `npm -v` y `yarn -v` en tu terminal.
+</Tip>
+
+## Servicios externos requeridos
+
+TGP Consultores depende de dos servicios externos que deben estar en funcionamiento antes de levantar la aplicación:
+
+- **Proyecto Firebase** — La plataforma utiliza Firebase como backend principal (BaaS). El proyecto Firebase debe tener habilitados los siguientes servicios:
+  - **Firestore** — Base de datos NoSQL para usuarios, planes y configuración del sistema.
+  - **Authentication** — Proveedor de autenticación **Email/Password** activo (Firebase Console → Authentication → Sign-in method).
+  - **Storage** — Almacenamiento de archivos para documentos subidos y grabaciones de voz.
+
+- **API backend REST** — Un servidor Node.js separado que gestiona la comunicación con las pasarelas bancarias y otras operaciones de servidor. Por defecto escucha en el puerto **4000** (configurable mediante la variable `REACT_APP_API_URL`).
+
+<Info>
+  El servidor de desarrollo del frontend corre en el puerto **3003**, definido en el script `start` del `package.json` y en la variable `PORT` del archivo `.env`.
+</Info>
+
+## Cuentas y credenciales necesarias
+
+Para configurar correctamente el entorno, necesitarás las siguientes credenciales:
+
+- **Credenciales del proyecto Firebase** — Obtenibles desde Firebase Console → Configuración del proyecto → Tus apps → Configuración del SDK:
+  - `apiKey`
+  - `authDomain`
+  - `projectId`
+  - `storageBucket`
+  - `messagingSenderId`
+  - `appId`
+  - `measurementId` (Google Analytics)
+
+- **Acceso a la API backend** — URL base del servidor API REST (por defecto `http://localhost:4000`). Consulta al equipo de backend para obtener la URL de producción y cualquier clave de autenticación requerida.
+
+<Warning>
+  El archivo `src/firebase/firebaseService.js` contiene valores por defecto que apuntan al proyecto de desarrollo `tpgapp-b5f15`. Para cualquier despliegue en producción, **siempre sobreescribe estas credenciales** mediante las variables de entorno `REACT_APP_FIREBASE_*` en tu archivo `.env`. Nunca compartas ni expongas las credenciales de producción en el código fuente.
+</Warning>

@@ -1,0 +1,116 @@
+---
+title: "Asesoría Legal: Agenda tu Consulta Jurídica en TGP"
+sidebarTitle: "Asesoría"
+description: "Solicita una asesoría legal en TGP Consultores por teléfono, videollamada o de forma presencial. Elige el área jurídica y selecciona el horario disponible."
+---
+
+**Asesoría** es el servicio de TGP Consultores que te conecta con abogados especializados para resolver tus dudas e inquietudes jurídicas. Puedes agendar una consulta por llamada telefónica, videollamada o de forma presencial, y elegir entre tres áreas del derecho: **Familiar**, **Laboral** y **Mercantil**. Para casos urgentes, también existe la modalidad de **Emergencia** que te pone en contacto inmediato con el equipo legal.
+
+## Modalidades de atención
+
+<CardGroup cols={3}>
+  <Card title="Llamada Telefónica" icon="phone" href="#llamada-telefonica">
+    El abogado te llama al número registrado en la fecha y hora que selecciones.
+  </Card>
+  <Card title="Videollamada" icon="video" href="#videollamada">
+    Consulta por videoconferencia a través de Jitsi Meet en la fecha y hora acordadas.
+  </Card>
+  <Card title="Emergencia / Presencial" icon="circle-exclamation" href="#emergencia">
+    Atención urgente o presencial para casos que no admiten espera.
+  </Card>
+</CardGroup>
+
+## Áreas de asesoría
+
+TGP Consultores ofrece consultoría especializada en tres grandes áreas del derecho. Selecciona el área que corresponda a tu situación y elige el tema específico de tu consulta.
+
+### Familiar
+
+El área **Familiar** atiende asuntos relacionados con el derecho de familia y sucesiones. Los temas disponibles son:
+
+- Divorcio
+- Custodia de hijos
+- Separación de bienes
+- Nulidad matrimonial
+- Contratos prenupciales
+- Juicios de herencias
+- Testamentos
+- Causa de separación
+- Patrimonio familiar
+- Amparo de huérfanos
+- Otros
+
+### Laboral
+
+El área **Laboral** cubre conflictos y consultas derivadas de la relación de trabajo. Los temas disponibles son:
+
+- Despido injustificado
+- Pago de prestaciones
+- Discriminación laboral
+- Mujeres embarazadas
+- Acoso sexual
+- Otros
+
+### Mercantil
+
+El área **Mercantil** atiende asuntos vinculados a la actividad empresarial y societaria. Los temas disponibles son:
+
+- Creación de empresa
+- Ampliación de empresa
+- Disolución de empresa
+- Nombramiento de representantes
+- Otros
+
+## Cómo agendar una asesoría
+
+<Steps>
+  <Step title="Accede a Asesoría">
+    Desde el panel principal, navega a **Asesoría** en la ruta `/apps/asesoria`. Verás las opciones de modalidad de atención: Presencial, Llamada Telefónica, Videollamada y Caso de Emergencia.
+  </Step>
+  <Step title="Selecciona el tipo de cita">
+    Haz clic en la modalidad que prefieras: **Llamada Telefónica** (`TipoCita: 'Llámada Teléfonica'`), **Videollamada** (`TipoCita: 'Videollamada'`) o **Presencial** (`TipoCita: 'Presencial'`). El tipo de cita se guarda en `localStorage` bajo la clave `Tipo`.
+  </Step>
+  <Step title="Elige el área jurídica y el tema">
+    Serás dirigido a la pantalla de selección de área (`/apps/Tipoasesoria`). Selecciona entre **Familiar**, **Laboral** o **Mercantil** y luego haz clic en el tema específico de tu consulta. El tema y el área quedan guardados en `localStorage` bajo las claves `ItemAsesoria` y `TipoAsesoria`.
+  </Step>
+  <Step title="Selecciona la fecha (citas programadas)">
+    Para las modalidades Telefónica, Videollamada y Presencial, aparecerá el calendario de disponibilidad. Navega por el calendario y selecciona el día que mejor se adapte a tu agenda.
+  </Step>
+  <Step title="Elige el horario disponible">
+    Una vez seleccionada la fecha, se mostrarán los bloques de hora disponibles. Haz clic en el horario de tu preferencia para reservarlo.
+  </Step>
+  <Step title="Casos de emergencia">
+    Si seleccionaste la modalidad **Emergencia**, el sistema activa el flujo de atención inmediata sin necesidad de elegir fecha ni hora. El equipo de TGP tomará contacto contigo lo antes posible.
+  </Step>
+  <Step title="Confirma la cita">
+    Haz clic en **Siguiente** para confirmar. La cita quedará registrada en Firestore con los campos `TipoCita` y el área jurídica seleccionada, y serás redirigido a la pantalla de pre-evaluación (`/apps/asesoria/preevaluacion`).
+  </Step>
+</Steps>
+
+## Llamada Telefónica
+
+En la modalidad de **Llamada Telefónica**, el abogado asignado se comunicará contigo al número de contacto registrado en tu perfil en la fecha y hora que hayas reservado. Esta opción es ideal cuando necesitas una consulta cómoda desde cualquier lugar sin necesidad de conexión a internet estable.
+
+<Note>
+  Asegúrate de que el número de teléfono en tu perfil (`/miperfil`) esté actualizado antes de agendar una cita telefónica.
+</Note>
+
+## Videollamada
+
+La modalidad de **Videollamada** utiliza la plataforma **Jitsi Meet** (`meet.jit.si`) para realizar la conferencia. Al iniciar la sesión, la plataforma genera automáticamente una sala única con un identificador aleatorio, permitiendo una comunicación segura y privada entre el usuario y el abogado asignado.
+
+<Note>
+  Para una videollamada óptima asegúrate de contar con conexión a internet estable, cámara y micrófono funcionando, y un navegador actualizado. No es necesario instalar ninguna aplicación adicional.
+</Note>
+
+## Emergencia
+
+La modalidad de **Emergencia** está diseñada para situaciones urgentes que requieren atención jurídica inmediata. Al seleccionar esta opción, el sistema omite el proceso de selección de fecha y horario y notifica de inmediato al equipo legal de TGP para que tome contacto contigo a la brevedad posible.
+
+<Warning>
+  Cada asesoría consume **una cuota de asesoría** de tu plan activo. El plan promocional gratuito incluye exactamente **1 asesoría**. Una vez agotada la cuota, deberás adquirir un nuevo plan para agendar consultas adicionales.
+</Warning>
+
+<Tip>
+  Si tu asesoría está cubierta por el plan promocional gratuito, serás redirigido automáticamente desde la página de pagos sin que se realice ningún cargo. No es necesario introducir datos bancarios para citas incluidas en el plan vigente.
+</Tip>
